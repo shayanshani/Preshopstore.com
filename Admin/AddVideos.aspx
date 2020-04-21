@@ -1,8 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/Master.Master" AutoEventWireup="true" CodeBehind="AddCity.aspx.cs" Inherits="PreShop.CompanySetup.Admin.AddCity" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Admin/Master.Master" AutoEventWireup="true" CodeBehind="AddVideos.aspx.cs" Inherits="PreShop.CompanySetup.Admin.AddVideos" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-     <style>
+
+
+    <style>
         #DataTables_Table_0_filter {
             text-align: right !important;
         }
@@ -11,7 +14,7 @@
 
         <div class="card bg-white">
             <div class="card-header">
-                Add City
+                Submit Video by URL
             </div>
             <div class="card-block">
                 <div class="row m-a-0">
@@ -32,13 +35,11 @@
                         <br />
 
                         <div class="form-horizontal">
+
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">City:&nbsp&nbsp<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtCityName" ErrorMessage="*" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator></label>
+                                <label class="col-sm-2 control-label"><i class="icon-social-youtube"></i>&nbsp Video URL:&nbsp&nbsp<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtUrl" ErrorMessage="*" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator></label>
                                 <div class="col-sm-10">
-                                    <asp:TextBox ID="txtCityName" runat="server" class="form-control"></asp:TextBox>
-
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator10" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtCityName" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation"></asp:RegularExpressionValidator>
-
+                                    <asp:TextBox ID="txtUrl" runat="server" class="form-control"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -62,7 +63,7 @@
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" ValidationGroup="validation" Style="float: right!important" class="btn btn-dark btn-round " />
                     </div>
                 </div>
-                <asp:HiddenField ID="hfCityID" runat="server" />
+                <asp:HiddenField ID="hfVideoID" runat="server" />
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -77,7 +78,8 @@
                             <table class="table table-bordered table-striped datatable editable-datatable responsive align-middle bordered">
                                 <thead>
                                     <tr>
-                                        <th>City</th>
+                                        <th>Heading</th>
+                                        <th>Url</th>
                                         <th>Status</th>
                                         <th>Last Update</th>
                                         <th>Updated Date</th>
@@ -87,11 +89,13 @@
                                 </thead>
                                 <tbody>
 
-                                    <asp:Repeater ID="rptCity" runat="server">
+                                    <asp:Repeater ID="rptVideos" runat="server">
                                         <ItemTemplate>
                                             <tr>
+                                                <td><b><%# Eval("[Heading]") %></b>
+                                                </td>
                                                 <td>
-                                                    <%# Eval("[City]") %>
+                                                    <%# Eval("[Video]") %>
                                                 </td>
                                                 <td><%# Convert.ToInt32(Eval("[isActive]"))==1 ? "Active" : "InActive" %>
                                                 </td>
@@ -100,17 +104,22 @@
                                                 <td><%# Eval("[PostedDate]","{0:dd MMM yyyy hh:mm tt}") %>
                                                 </td>
                                                 <td class="center">
-                                                    <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("[CityID]") %>'><span class="fa fa-pencil" style="font-size: 22px!important;"></span></asp:LinkButton>
+                                                    <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("[VideoID]") %>'><span class="fa fa-pencil" style="font-size: 22px!important;"></span></asp:LinkButton>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
+
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 </asp:Content>

@@ -1,8 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/Master.Master" AutoEventWireup="true" CodeBehind="AddCity.aspx.cs" Inherits="PreShop.CompanySetup.Admin.AddCity" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/Master.Master" AutoEventWireup="true" CodeBehind="AddColors.aspx.cs" Inherits="PreShop.CompanySetup.Admin.AddColors" %>
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-     <style>
+
+    <style>
         #DataTables_Table_0_filter {
             text-align: right !important;
         }
@@ -11,7 +13,7 @@
 
         <div class="card bg-white">
             <div class="card-header">
-                Add City
+                Add Color
             </div>
             <div class="card-block">
                 <div class="row m-a-0">
@@ -33,22 +35,9 @@
 
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">City:&nbsp&nbsp<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtCityName" ErrorMessage="*" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator></label>
+                                <label class="col-sm-2 control-label">Select Color:</label>
                                 <div class="col-sm-10">
-                                    <asp:TextBox ID="txtCityName" runat="server" class="form-control"></asp:TextBox>
-
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator10" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtCityName" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation"></asp:RegularExpressionValidator>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Select Status</label>
-                                <div class="col-sm-8">
-                                    <asp:DropDownList ID="ddlStatus" runat="server" class="form-control" Style="width: 100%">
-                                        <asp:ListItem Selected="True" Value="1">Active</asp:ListItem>
-                                        <asp:ListItem Value="2">InActive</asp:ListItem>
-                                    </asp:DropDownList>
+                                    <telerik:RadColorPicker ID="txtColor" runat="server"></telerik:RadColorPicker>
                                 </div>
                             </div>
 
@@ -58,11 +47,11 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-4">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" ValidationGroup="validation" Style="float: right!important" class="btn btn-dark btn-round " />
                     </div>
                 </div>
-                <asp:HiddenField ID="hfCityID" runat="server" />
+                <asp:HiddenField ID="hfColorID" runat="server" />
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -77,30 +66,25 @@
                             <table class="table table-bordered table-striped datatable editable-datatable responsive align-middle bordered">
                                 <thead>
                                     <tr>
-                                        <th>City</th>
-                                        <th>Status</th>
-                                        <th>Last Update</th>
-                                        <th>Updated Date</th>
+                                        <th>Color Name</th>
+                                        <th>Color</th>
                                         <th>Action(s)
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    <asp:Repeater ID="rptCity" runat="server">
+                                    <asp:Repeater ID="rptColors" runat="server">
                                         <ItemTemplate>
                                             <tr>
                                                 <td>
-                                                    <%# Eval("[City]") %>
+                                                    <%# Eval("[ColorName]") %>
                                                 </td>
-                                                <td><%# Convert.ToInt32(Eval("[isActive]"))==1 ? "Active" : "InActive" %>
-                                                </td>
-                                                <td><%# Eval("[UpdatedBy]") %>
-                                                </td>
-                                                <td><%# Eval("[PostedDate]","{0:dd MMM yyyy hh:mm tt}") %>
+                                                <td>
+                                                    <div style='height: 20px; width: 20px; margin-bottom: 3px; <%# "background:" + Eval("ColorCode") + ";" %>'></div>
                                                 </td>
                                                 <td class="center">
-                                                    <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("[CityID]") %>'><span class="fa fa-pencil" style="font-size: 22px!important;"></span></asp:LinkButton>
+                                                    <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" OnClientClick="return confirm('Are you sure you want to delete this color?')" CommandArgument='<%# Eval("[ColorID]") %>'><span class="fa fa-trash" style="font-size: 22px!important;"></span></asp:LinkButton>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -113,4 +97,6 @@
             </div>
         </div>
     </div>
+
+
 </asp:Content>
