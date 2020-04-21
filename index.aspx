@@ -106,7 +106,7 @@
 
                                 <div>
                                     <h1>
-                                        <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                        <img src='<%= Request.IsSecureConnection ? "https://thepreshop.com/assets/img/logo/logo.png" : "http://thepreshop.com/assets/img/logo/logo.png" %>' height="45" />
                                     </h1>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
 
                                 <div>
                                     <h1>
-                                        <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                        <img src='<%= Request.IsSecureConnection ? "https://thepreshop.com/assets/img/logo/logo.png" : "http://thepreshop.com/assets/img/logo/logo.png" %>' height="45" />
                                     </h1>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
 
                                 <div>
                                     <h1>
-                                        <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                        <img src='<%= Request.IsSecureConnection ? "https://thepreshop.com/assets/img/logo/logo.png" : "http://thepreshop.com/assets/img/logo/logo.png" %>' height="45" />
                                     </h1>
                                 </div>
                             </div>
@@ -222,7 +222,7 @@
 
                                 <div>
                                     <h1>
-                                        <img src="http://thepreshop.com/assets/img/logo/logo.png" height="45" />
+                                        <img src="<%= Request.IsSecureConnection ? "https://thepreshop.com/assets/img/logo/logo.png" : "http://thepreshop.com/assets/img/logo/logo.png" %>" height="45" />
                                     </h1>
                                 </div>
                             </div>
