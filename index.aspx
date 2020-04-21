@@ -82,7 +82,7 @@
                             <div>
                                 <br />
                                 <div class="pull-right">
-                                    <asp:Button ID="btnLogin" runat="server" class="btn btn-default submit fa-input" OnClick="btnLogin_Click" ValidationGroup="validation" Text="&#xf110; Login " OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Logging in... &#xf110;';"
+                                    <asp:Button ID="btnLogin" runat="server" class="btn btn-default submit fa-input" OnClick="btnLogin_Click" ValidationGroup="validation" Text="Login " OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Logging in... &#xf110;';"
                                                 UseSubmitBehavior="false" />
 
                                 </div>
