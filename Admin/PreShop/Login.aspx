@@ -30,7 +30,7 @@
                         <div class="card bg-white no-border">
                             <div class="text-center m-b">
                                 <%-- <h4 class="text-uppercase">Welcome back</h4>--%>
-                                <img src='<%= ResolveUrl("../CustomImages/PreShop.png") %>' height="200" style="width: 200px" />
+                                <img src='http://yourpreshop.com/assets/img/logo/logo.png' height="200" style="width: 200px" />
                                 <p>
                                     <asp:Label ID="lblmsg" runat="server" Text="Please sign in to your account"></asp:Label>
                                 </p>
