@@ -1,120 +1,200 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="PreShop.AdministrationLogin.Admin.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="PreShop.AdminPortal.PreShop.Login" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <meta charset="utf-8" />
-    <title>Master Admin</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
-    <!-- build:css({.tmp,app}) ../styles/app.min.css -->
-    <link rel="stylesheet" href="../styles/webfont.css" />
-    <link rel="stylesheet" href="../styles/climacons-font.css" />
-    <link rel="stylesheet" href="../vendor/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="../styles/font-awesome.css" />
-    <link rel="stylesheet" href="../styles/card.css" />
-    <link rel="stylesheet" href="../styles/sli.css" />
-    <link rel="stylesheet" href="../styles/animate.css" />
-    <link rel="stylesheet" href="../styles/app.css" />
-    <link rel="stylesheet" href="../styles/app.skins.css" />
-    <!-- endbuild -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administration Login</title>
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="../css/CheckBoxes.css" rel="stylesheet" />
+    <!-- Animate.css -->
+    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <style>
+        .login_content form input[type=text], .login_content form input[type=email], .login_content form input[type=password] {
+            margin: 0px !important;
+        }
+
+        #chkremember {
+            display: none !important;
+        }
+
+        .fa-input {
+            font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .fa-spin {
+            -webkit-animation: fa-spin 2s infinite linear;
+            animation: fa-spin 2s infinite linear;
+        }
+    </style>
 </head>
-<body>
-    <form id="form1" runat="server" class="form-layout">
-        <!-- /page loading spinner -->
-        <div class="app signin usersession">
-            <div class="session-wrapper">
-                <div class="page-height-o row-equal align-middle">
-                    <div class="column">
-                        <div class="card bg-white no-border">
-                            <div class="text-center m-b">
-                                 <h4 class="text-uppercase">Welcome back</h4>
-                                <img src='<%= Request.IsSecureConnection ? "https://yourpreshop.com/assets/img/logo/logo.png" : "http://yourpreshop.com/assets/img/logo/logo.png" %>' style="margin-bottom: 15px;margin-top: 15px;" />
-                                <p>
-                                    <asp:Label ID="lblmsg" runat="server" Text="Please sign in to your account"></asp:Label>
-                                </p>
+<body class="login">
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form id="form1" runat="server">
+                    <asp:ScriptManager ID="mainScriptmg" runat="server"></asp:ScriptManager>
+                    <p>
+                        <asp:Label ID="lblHeading" runat="server">Please sign in to your account</asp:Label>
+                    </p>
+                    <h1 id="h1" runat="server">Administration Login</h1>
+                    <p>
+                        <asp:UpdatePanel ID="pnl" runat="server">
+                            <ContentTemplate>
+                                <asp:Timer ID="timeer" runat="server" Interval="10000" OnTick="timeer_Tick"></asp:Timer>
+                                <asp:Label ID="lblmsg" runat="server"></asp:Label>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </p>
+                    <asp:Panel ID="divLogin" runat="server" DefaultButton="btnSignIN">
+                        <div style="text-align: left!important">
+                            <asp:TextBox ID="txtUserName" runat="server" class="form-control" placeholder="Username"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtUserName" ErrorMessage="Enter Username" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator>
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator10" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtUserName" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation"></asp:RegularExpressionValidator>
+                        </div>
+                        <div style="text-align: left!important">
+                            <asp:TextBox ID="txtPassword" runat="server" class="form-control" placeholder="Password" TextMode="Password" Style="margin-top: 20px!important;"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtPassword" ErrorMessage="Enter Password" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator>
+
+                        </div>
+                        <div>
+                            <br />
+                            <div class="pull-right">
+                                <asp:Button ID="btnSignIN" runat="server" class="btn btn-default submit fa-input" OnClick="btnSignIN_Click" ValidationGroup="validation" Text="Login" OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Logging in... &#xf110;';"
+                                    UseSubmitBehavior="false" />
                             </div>
-                            <div class="card-block" id="divLogin" runat="server">
+                            <div class="pull-left hidden">
 
-                                <div class="form-inputs">
-                                    <label class="text-uppercase">username</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtUserName" ErrorMessage="Enter Username" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator>
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator10" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtUserName" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation"></asp:RegularExpressionValidator>
-
-                                    <asp:TextBox ID="txtUserName" runat="server" class="form-control input-lg" placeholder="Email Address"></asp:TextBox>
-
-                                    <label class="text-uppercase">Password</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtPassword" ErrorMessage="Enter Password" ForeColor="Red" ValidationGroup="validation"></asp:RequiredFieldValidator>
-                                    <asp:TextBox ID="txtPassword" runat="server" class="form-control input-lg" placeholder="Password" TextMode="Password"></asp:TextBox>
-
-                                </div>
-                                <asp:Button ID="btnSignIN" runat="server" class="btn btn-success btn-block btn-lg m-b" OnClick="btnSignIN_Click" Text="Login" ValidationGroup="validation"></asp:Button>
-                                <label class="cb-checkbox cb-sm">
-                                    <asp:CheckBox ID="chkremember" runat="server" />
-                                    Remember me
-                               
-                                </label>
-                                <div class="divider">
-                                    <asp:LinkButton ID="btnForGotPass" runat="server" class="bottom-link" OnClick="btnForGotPass_Click">Forgotten password?</asp:LinkButton>
+                                <div class="checkbox checkbox-success">
+                                    <input type="checkbox" class="styled" id="chkremember" runat="server" />
+                                    <label for="chkremember">Remeber Me</label>
                                 </div>
 
-                            </div>
-
-
-                            <div class="card-block" id="divReset" visible="false" runat="server">
-
-                                <div class="form-inputs">
-                                    <label>Enter your Contact</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtContact" ErrorMessage="Enter Contact" ForeColor="Red" ValidationGroup="validation1"></asp:RequiredFieldValidator>
-
-                                    <asp:TextBox ID="txtContact" runat="server" class="form-control input-lg" placeholder="Contact"></asp:TextBox>
-
-                                    <label>Pin Code</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtPinCode" ErrorMessage="Enter Pincode" ForeColor="Red" ValidationGroup="validation1"></asp:RequiredFieldValidator>
-                                    <asp:TextBox ID="txtPinCode" runat="server" class="form-control input-lg" placeholder="Pin Code" TextMode="Password"></asp:TextBox>
-
-                                </div>
-                                <asp:Button ID="btnSend" runat="server" class="btn btn-success btn-block btn-lg m-b" OnClick="btnSend_Click" Text="Send" ValidationGroup="validation1"></asp:Button>
-                            </div>
-
-                            <div class="card-block" id="divPasswordUpdate" visible="false" runat="server">
-
-                                <div class="form-inputs">
-                                    <label class="text-uppercase">Enter Code</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtCode" ErrorMessage="Enter Code" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
-
-                                    <asp:TextBox ID="txtCode" runat="server" class="form-control input-lg" placeholder="Code"></asp:TextBox>
-
-                                    <label class="text-uppercase">New Password</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtNewPassword" ErrorMessage="New Password" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
-                                    <asp:TextBox ID="txtNewPassword" runat="server" placeholder="Enter New Password" autocomplete="off" TextMode="Password" class="form-control input-lg"></asp:TextBox>
-
-
-                                    <label class="text-uppercase">Confirm Paswword</label>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtRetypePaswword" ErrorMessage="Confirm Password" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
-                                    <asp:CompareValidator ID="cmpPass" runat="server" ControlToValidate="txtNewPassword" ControlToCompare="txtRetypePaswword" Operator="Equal" ErrorMessage="Passwords mismatched" ValidationGroup="validation2" ForeColor="Red" SetFocusOnError="true"></asp:CompareValidator>
-
-                                    <asp:TextBox ID="txtRetypePaswword" runat="server" placeholder="Confirm Paswword" autocomplete="off" TextMode="Password" class="form-control input-lg"></asp:TextBox>
-
-                                </div>
-                                <asp:Button ID="btnChange" runat="server" class="btn btn-success btn-block btn-lg m-b" OnClick="btnChange_Click" Text="Update" ValidationGroup="validation2"></asp:Button>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <asp:LinkButton ID="btnForGotPass" runat="server" OnClick="btnForGotPass_Click" class="to_register">Lost your password?</asp:LinkButton>
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div>
+                                <h1>
+                                    <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                </h1>
+                            </div>
+                        </div>
+                    </asp:Panel>
+                     <asp:Panel  DefaultButton="btnSend" id="divReset" visible="false" runat="server">
+
+                            <div style="text-align: left!important">
+                                <asp:TextBox ID="txtContact" runat="server" class="form-control" placeholder="Enter your Contact"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtContact" ErrorMessage="Enter your contact" ForeColor="Red" ValidationGroup="validation1"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtContact" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation1"></asp:RegularExpressionValidator>
+
+                            </div>
+                            <div style="text-align: left!important">
+                                <asp:TextBox ID="txtPinCode" runat="server" class="form-control" placeholder="Pic Code" TextMode="Password" Style="margin-top: 20px!important;"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtPinCode" ErrorMessage="Enter Pincode" ForeColor="Red" ValidationGroup="validation1"></asp:RequiredFieldValidator>
+
+                            </div>
+                            <div>
+                                <br />
+                                <div class="pull-right">
+                                    <asp:Button ID="btnSend" runat="server" class="btn btn-default submit" OnClick="btnSend_Click" ValidationGroup="validation1" Text="Send" OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Sending...';"
+                                                UseSubmitBehavior="false" />
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="separator">
+                                <asp:LinkButton ID="btnBacktoLogin1" runat="server" OnClick="btnBacktoLogin1_Click">Back to login</asp:LinkButton>
+
+                                <div class="clearfix"></div>
+                                <br />
+
+                                <div>
+                                    <h1>
+                                        <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                    </h1>
+                                </div>
+                            </div>
+                        </asp:Panel>
+
+                        <asp:Panel  DefaultButton="btnChange" id="divPasswordUpdate" visible="false" runat="server">
+
+                            <div style="text-align: left!important">
+                                <asp:TextBox ID="txtCode" runat="server" class="form-control" placeholder="Enter Code"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtCode" ErrorMessage="Enter your contact" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="$ symbol is not allowed" ControlToValidate="txtCode" ValidationExpression="[^$]+" Display="Dynamic" BorderColor="#FF66FF" ForeColor="Red" SetFocusOnError="true" ValidationGroup="validation2"></asp:RegularExpressionValidator>
+
+                            </div>
+                            <div style="text-align: left!important">
+                                <asp:TextBox ID="txtNewPassword" runat="server" class="form-control" placeholder="New Password" TextMode="Password" Style="margin-top: 20px!important;"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtNewPassword" ErrorMessage="Enter New Password" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
+
+                            </div>
+
+                            <div style="text-align: left!important">
+                                <asp:TextBox ID="txtRetypePaswword" runat="server" class="form-control" placeholder="Confirm Password" TextMode="Password" Style="margin-top: 20px!important;"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" BorderColor="#FF66FF" SetFocusOnError="true" ControlToValidate="txtRetypePaswword" ErrorMessage="Retype Password" ForeColor="Red" ValidationGroup="validation2"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cmpPass" runat="server" ControlToValidate="txtNewPassword" ControlToCompare="txtRetypePaswword" Operator="Equal" ErrorMessage="Passwords mismatched" ValidationGroup="validation2" ForeColor="Red" SetFocusOnError="true"></asp:CompareValidator>
+                            </div>
+
+                            <div>
+                                <br />
+                                <div class="pull-right">
+                                    <asp:Button ID="btnChange" runat="server" class="btn btn-default submit" OnClick="btnChange_Click" ValidationGroup="validation2" Text="Update" OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Updating...';"
+                                                UseSubmitBehavior="false" />
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="separator">
+                                <asp:LinkButton ID="btnBackTologin2" runat="server" OnClick="btnBackTologin2_Click">Back to login</asp:LinkButton>
+                                <div class="clearfix"></div>
+                                <br />
+
+                                <div>
+                                    <h1>
+                                        <img src='http://thepreshop.com/assets/img/logo/logo.png' height="45" />
+                                    </h1>
+                                </div>
+                            </div>
+                        </asp:Panel>
+
+                </form>
+            </section>
         </div>
-    </form>
-    <!-- build:js({.tmp,app}) ../scripts/app.min.js -->
-    <script src='<%= ResolveUrl("../scripts/helpers/modernizr.js") %>'></script>
-    <script src='<%= ResolveUrl("../vendor/jquery/dist/jquery.js") %>'></script>
-    <script src='<%= ResolveUrl("../vendor/bootstrap/dist/js/bootstrap.js") %>'></script>
-    <script src='<%= ResolveUrl("../vendor/fastclick/lib/fastclick.js") %>'></script>
-    <script src='<%= ResolveUrl("../vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js") %>'></script>
-    <script src='<%= ResolveUrl("../scripts/helpers/smartresize.js") %>'></script>
-    <script src='<%= ResolveUrl("../scripts/constants.js") %>'></script>
-    <script src='<%= ResolveUrl("../scripts/main.js") %>'></script>
-    <!-- endbuild -->
+    </div>
 </body>
+
+<!-- jQuery -->
+<script src='<%= ResolveUrl("../vendors/jquery/dist/jquery.min.js") %>'></script>
+<!-- Bootstrap -->
+<script src='<%= ResolveUrl("../vendors/bootstrap/dist/js/bootstrap.min.js") %>'></script>
+
+<!-- iCheck -->
+<script src='<%= ResolveUrl("../vendors/iCheck/icheck.min.js") %>'></script>
+
+
 </html>
