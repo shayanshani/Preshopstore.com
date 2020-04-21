@@ -72,7 +72,7 @@
                                                     <%# Eval("RegistrationDate","{0:dd MMM yyyy hh:mm tt}") %>
                                                 </td>
                                                 <td>
-                                                    <img src='<%# Eval("Logo").ToString().Replace("~","..") %>' style="height: 80px; width: 80px" />
+                                                    <img src='http://yourpreshop.com/<%# Eval("Logo").ToString().Replace("~","..") %>' style="height: 80px; width: 80px" />
                                                 </td>
                                                 <td class="center">
                                                     <asp:LinkButton ID="btnBlock" runat="server" OnClick="btnBlock_Click" CommandArgument='<%# Eval("[StoreID]") %>' ToolTip="Block this store"><span class="fa fa-pencil" style="font-size: 22px!important;"></span></asp:LinkButton>
