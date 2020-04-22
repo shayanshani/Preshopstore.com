@@ -57,7 +57,7 @@
                         <p>
                             <asp:Label ID="lblHeading" runat="server">Please sign in to your account</asp:Label>
                         </p>
-                        <h1 id="h1" runat="server">Store Login Form</h1>
+                        <h1 id="h1" runat="server">Login Form</h1>
                         <p>
                             <asp:UpdatePanel ID="pnl" runat="server">
                                 <ContentTemplate>
