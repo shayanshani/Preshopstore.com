@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Store Login</title>
+    <title>Store Panel Login</title>
 
     <!-- Bootstrap -->
     <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,6 @@
                 <section class="login_content">
                     <form id="form1" runat="server">
                         <asp:ScriptManager ID="mainScriptmg" runat="server"></asp:ScriptManager>
-
                         <p>
                             <asp:Label ID="lblHeading" runat="server">Please sign in to your account</asp:Label>
                         </p>
