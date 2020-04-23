@@ -207,8 +207,8 @@
 
                             <li>
                                 <a href="/Admin/StoresCredentials.aspx">
-                                    <i class="icon-user"></i>
-                                    <span>Store Credentials</span>
+                                    <i class="icon-arrow-right"></i>
+                                    <span>Store Sign On</span>
                                 </a>
                             </li>
 
