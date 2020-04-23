@@ -44,6 +44,10 @@
                 $("#<%= chkSingleCategory.ClientID%>").prop('checked', false);
                 $("#<%= DivCategorySetup.ClientID%>").css('display', 'none');
             });
+
+            $("#<%= chkResendEmail.ClientID%>").click(function () {
+                $("#<%= divEmailId.ClientID%>").ToggleSectionDisplay();
+             });
         });
     </script>
     <style>
@@ -332,6 +336,24 @@
                                         <i class="handle"></i>
                                     </span>
                                 </label>
+                            </div>
+                            <div id="divResendEmail" runat="server" visible="false">
+                                <label class="col-sm-2 control-label">Re-send Email:</label>
+                                <div class="col-sm-1">
+                                    <label class="switch switch-dark m-b">
+                                        <input type="checkbox" runat="server" id="chkResendEmail">
+                                        <span>
+                                            <i class="handle"></i>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div id="divEmailId" runat="server" style="display: none">
+                                    <label class="col-sm-2 control-label">Enter Correct Email:</label>
+                                    <div class="col-sm-3">
+                                        <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Email Address"></asp:TextBox>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
