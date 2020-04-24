@@ -186,16 +186,6 @@
                                             <li><a href="AddVideos.aspx">Upload Videos</a></li>
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-building-o"></i>Manage Branches<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li>
-                                                <a href="AddBranches.aspx">Create Branch</a>
-                                            </li>
-                                            <li><a href="ViewBranches.aspx">View Branches</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="ManageAccounts.aspx"><i class="fa fa-group"></i>Manage Accounts</a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
