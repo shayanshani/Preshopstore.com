@@ -240,6 +240,26 @@
 
                         </div>
                         <hr />
+                        <div class="row">
+                            <h5>Store Types
+                            </h5>
+                            <hr />
+                            <div id="CheckboxesRepeaterCat">
+                                <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound">
+                                    <ItemTemplate>
+                                        <label class="col-sm-2 control-label"><%# Eval("Category") %></label>
+                                        <div class="col-sm-1">
+                                            <label class="switch switch-primary m-b">
+                                                <input type="checkbox" runat="server" id="chkCategory" value='<%# Eval("CategoryId") %>'>
+                                                <span>
+                                                    <i class="handle"></i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+                        </div>
                         <div class="row" id="divStockSetting" runat="server" visible="false">
                             <h5>Stock/Sales Setting
                             </h5>
@@ -374,6 +394,22 @@
         function validateCheckBoxes() {
             var isValid = false;
             $('#CheckboxesRepeater input[type="checkbox"]').each(function () {
+                if ($(this).prop('checked') == true) {
+                    isValid = true;
+                }
+            });
+            if (isValid == false) {
+                alert("Please select at least one Store type");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+         function validateCheckBoxes() {
+            var isValid = false;
+            $('#CheckboxesRepeaterCat input[type="checkbox"]').each(function () {
                 if ($(this).prop('checked') == true) {
                     isValid = true;
                 }
