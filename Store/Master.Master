@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="PreShop.AdminPortal.Master" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="PreShop.StoreDashBaord.Store.Master" %>
 
 <!DOCTYPE html>
 
@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Panel</title>
+    <title>Store Panel</title>
     <!-- Bootstrap -->
     <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -30,7 +30,7 @@
     <link href="/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
     --%>
     <!-- Select2 -->
-    <link href="/vendors/Select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
     <!-- Switchery -->
     <link href="/vendors/switchery/dist/switchery.min.css" rel="stylesheet" />
     <!-- starrr -->
@@ -54,7 +54,7 @@
 
     <!-- Custom Theme Style -->
     <link href="/build/css/custom.min.css" rel="stylesheet">
-    <link href="/Select2/CustomCss.css" rel="stylesheet" />
+
     <script type="text/javascript">
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
@@ -108,31 +108,164 @@
             background-color: #f2f2f2;
             border-color: #cccccc;
         }
-
-        .select2 {
-            width: 100% !important;
-        }
-
-        #datatable-responsive td {
-            vertical-align: middle !important;
-        }
     </style>
-    <!-- jQuery -->
-    <script src="/vendors/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/CustomFiles/bootstrap-notify.min.js"></script>
-    <link href="/CustomFiles/CustomNotify.css" rel="stylesheet" />
+      <!-- jQuery -->
+        <script src="/vendors/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 
-<body class="nav-md">
+<body class="nav-md" onload="updateClock(); setInterval('updateClock()', 1000 )">
     <form id="form1" runat="server">
+        <script src="/Scripts/jquery-1.6.4.min.js"></script>
+        <script src="/Scripts/jquery.signalR-2.4.0.min.js"></script>
+        <script src="/signalr/hubs"></script>
+        <script src="/Scripts/PlaySound.js"></script>
+        <script>
+            var jq = $.noConflict(true);
+            jq(function () {
+                var job = jq.connection.chathub;
+                job.client.displayStatus = function () {
+                    getData();
+                    GetNotificationPopOver();
+                };
+                jq.connection.hub.start();
+                jq.connection.hub.disconnected(function () {
+                    setTimeout(function () {
+                        jq.connection.hub.start();
+                    }, 5000); // Restart connection after 5 seconds.
+                });
+                getData();
+            });
+
+            function getData() {
+                jq.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "Dashboard.aspx/GetData",
+                    dataType: "json",
+                    success: function (data) {
+                        var tbl = jq("#menu1");
+                        tbl.empty();
+                        var MessagesCount = data.d[data.d.length - 1].Count;
+                        var OrderCount = data.d[data.d.length - 2].Count;
+                        var nhtml = '';
+                        for (var i = 0; i < data.d.length; i++) {
+                            if (data.d[i].Subject != null) {
+                                var style = '';
+                                if (data.d[i].isRead == 1) {
+                                    style = 'background: #fff';
+                                }
+                                else {
+                                    style = 'background: #f7f7f7';
+                                }
+                                nhtml += '<li style="' + style + '"><a href="#" onclick="ReadNotification(' + data.d[i].Nid + ',\'' + data.d[i].Url + '\');"><span class="message">' + data.d[i].Subject + '</span><span class="message">' + data.d[i].Message + '</span></a></li>';
+                            }
+                        }
+                        nhtml += ' <li>' +
+                            '<div class="text-center">'
+                            + '<a href="ReadAlert.aspx">' +
+                            '<strong>See All Alerts</strong>' +
+                            '<i class="fa fa-angle-right"></i>'
+                            + '</a>' +
+                            '</div>'
+                            + '</li>';
+
+                        if (MessagesCount > 0) {
+                            jq("#alertCountBadge").show();
+                            jq("#alertCountBadge").html(MessagesCount);
+                        }
+                        else
+                            jq("#alertCountBadge").hide();
+
+                        if (OrderCount > 0) {
+                            jq("#ordersAlertBadge").show();
+                            jq("#ordersAlertBadge").html(OrderCount);
+                        }
+                        else
+                            jq("#ordersAlertBadge").hide();
+                        tbl.append(nhtml);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            function ReadNotification(Nid, Url) {
+                jq.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "Dashboard.aspx/ReadNotification",
+                    data: "{'NotificationID':'" + Nid + "'}",
+                    dataType: "json",
+                    success: function (data) {
+                        if (Url != 'x.aspx')
+                            window.location.assign(Url);
+                    },
+                    error: function (xhr) {
+                        //alert(xhr.responseText);
+                    }
+                });
+            }
+
+            function GetNotificationPopOver() {
+                jq.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "Dashboard.aspx/GetPopOverNotification",
+                    dataType: "json",
+                    success: function (data) {
+                        var popupNotification = '';
+                        for (var i = 0; i < data.d.length; i++) {
+
+                            popupNotification += '<div class="alert alert_default">'
+                                + '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+                                + '<p><strong>' + data.d[i].Subject + '</strong><br>'
+                                + '<a href="' + data.d[i].Url + '"><small><em>' + data.d[i].Message + '</em></small></a>'
+                                + '</p>'
+                                + '</div>';
+                            jq.playSound("/Scripts/appointed.mp3");
+                            DisableNotificatinoPopUp(data.d[i].Nid);
+                        }
+                        jq('#notificationPopUp').html(popupNotification);
+                        var popover = jq('#alert_popover');
+                        popover.show();
+                        popover.delay(15000).fadeOut();
+                    },
+                    error: function (xhr) {
+                        //alert(xhr.responseText);
+                    }
+                });
+            }
+
+            function DisableNotificatinoPopUp(NotificationID) {
+                jq.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "Dashboard.aspx/DisableNotification",
+                    data: "{'NotificationID':'" + NotificationID + "'}",
+                    dataType: "json",
+                    success: function (data) {
+
+                    },
+                    error: function (xhr) {
+                        //alert(xhr.responseText);
+                    }
+                });
+            }
+
+
+        </script>
+      
+        <script src="/JqueryAjax/Ajax.js"></script>
         <link href="/Select2/bootstrap-multiselect.css" rel="stylesheet" />
         <script src="/Select2/bootstrap-multiselect.js"></script>
         <script src="/Select2/select2.min.js"></script>
-        <script src="/build/js/bootstrap-filestyle.min.js"></script>
+        <script type="text/javascript" src="/BarCode/js/bootstrap-filestyle.min.js"> </script>
+        <script src="/BarCode/jquery.scannerdetection.js"></script>
         <asp:ScriptManager ID="mainScriptmg" runat="server"></asp:ScriptManager>
         <div class="container body">
             <div class="main_container">
@@ -143,56 +276,78 @@
                         <!-- menu profile quick info -->
                         <div class="profile clearfix">
                             <div class="profile_pic">
-                                <img src='http://yourpreshop.com/assets/img/logo/logoSmall.png' alt="..." class="img-circle profile_img" />
+                                <img src='<%= ResolveUrl(Convert.ToString(Session["Logo"])) %>' alt="..." class="img-circle profile_img" />
                             </div>
                             <div class="profile_info">
                                 <span>Welcome,</span>
-                                <h2 style="width: 140px!important;">PreShop</h2>
-                                &nbsp<small>(Technial Head)</small>
+                                <h2 style="width: 140px!important;"><%= Session["StoreName"] %></h2>
+                                &nbsp<small>(<%= Session["BrachName"].ToString().Contains("Branch") ? Session["BrachName"].ToString() : Session["BrachName"] + " Branch" %>)</small>
                             </div>
                         </div>
                         <br />
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
-                                <h3>Preshop</h3>
+                                <h3>General</h3>
                                 <ul class="nav side-menu">
                                     <li><a href="Dashboard.aspx"><i class="fa fa-home"></i>Home</a>
                                     </li>
-                                    <li><a><i class="fa fa-bars"></i>Manage Categories<span class="fa fa-chevron-down"></span></a>
+                                    <li id="liOrders" runat="server">
+                                        <a href="Orders.aspx">
+                                            <i class="fa fa-cart-plus"></i>Orders
+                                            <span class="badge bg-green pull-right" id="ordersAlertBadge" style="display: none"></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id="LnkSalesForm" runat="server">
+                                            <i class="fa fa-shopping-cart"></i>Sales & Billing Form
+                                        </a>
+                                    </li>
+                                    <li><a><i class="fa fa-bars"></i>Sales Detail<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li>
-                                                <a href="AddCategories.aspx">Add/Edit Categories</a>
+                                                <a href="ViewSales.aspx">Sales</a>
                                             </li>
                                             <li>
-                                                <a href="AddSubCategories.aspx">Add/Edit SubCategories</a>
+                                                <a href="CustomerBills.aspx">Customer Bills</a>
                                             </li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-database"></i>Manage Products<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="AddCompany.aspx">Add/Edit Brands</a></li>
+                                            <li><a href="AddProduct.aspx">Add/Edit Products</a></li>
+                                            <li id="LIsizes" runat="server" visible="false"><a href="AddSizes.aspx">Add/Edit Sizes</a></li>
+                                            <li id="LiFlavours" runat="server" visible="false"><a href="AddFlavors.aspx">Add/Edit Flavour</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-plus"></i>Manage Stock<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="StockEntry.aspx">Add/Edit Stock</a></li>
+                                            <li><a href="ViewCurrentStock.aspx">Current Stock</a></li>
+                                            <li><a href="ViewStock.aspx">Stock Details</a></li>
+                                            <li id="liSupplierBills" runat="server"><a href="ViewBills.aspx">Supplier Bills</a></li>
+                                        </ul>
+                                    </li>
+                                    <li id="liCustomer" runat="server">
+                                        <a href="ViewCustomers.aspx">
+                                            <i class="fa fa-user-plus"></i>Customer Information
+                                        </a>
+                                    </li>
+                                    <li id="liSupplier" runat="server">
+                                        <a href="AddRetailers.aspx">
+                                            <i class="fa fa-user-plus"></i>Supplier Information
+                                        </a>
+                                    </li>
+                                    <li id="liBranches" runat="server" visible="false"><a><i class="fa fa-building-o"></i>Manage Branches<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
                                             <li>
-                                                <a href="AddHeading.aspx">Add/Edit SubHeadings</a>
-                                            </li>
-                                            <li><a href="AddStoreTypes.aspx">Add/Edit StoreTypes</a></li>
-                                        </ul>
-                                    </li>
-                                     <li><a><i class="fa fa-building"></i>Manage Stores<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="StoreList.aspx">Registered Stores/Requests</a></li>
-                                            <li><a href="StoresCredentials.aspx">Single Sign On</a></li>
-                                            <li><a href="AssignCategories.aspx">Assign Categories</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-database"></i>Manage Website<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="AddCity.aspx">Add/Edit Cities</a></li>
-                                            <li><a href="AddSlider.aspx">Add/Edit Silder</a></li>
-                                            <li><a href="AddVideos.aspx">Upload Videos</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-building-o"></i>Manage Branches<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li>
-                                                <a href="AddBranches.aspx">Create Branch</a>
+                                                <a href="AddBranches.aspx">Add Branches</a>
                                             </li>
                                             <li><a href="ViewBranches.aspx">View Branches</a></li>
                                         </ul>
+                                    </li>
+                                    <li>
+                                        <a href='ViewExpenses.aspx'><i class="fa fa-money"></i>Expenses</a>
                                     </li>
                                     <li><a href="ManageAccounts.aspx"><i class="fa fa-group"></i>Manage Accounts</a>
                                     </li>
@@ -213,13 +368,14 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <img src='<%= ResolveUrl(Convert.ToString(Session["UserImage"])) %>' alt=""><%= Session["AdminUser"] %>(<%= Session["Designation"] %>)
+                                        <img src='<%= ResolveUrl(Convert.ToString(Session["UserImage"])) %>' alt=""><%# Session["StoreUserName"] %>
                                         <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                        <li><a href="#">Profile</a></li>
+                                        <li><a href="Profile.aspx">Profile</a></li>
+                                        <li><a href="Help.aspx">Help</a></li>
                                         <li>
-                                            <asp:LinkButton ID="btnLogout" runat="server"><i class="fa fa-sign-out pull-right"></i>Log Out</asp:LinkButton></li>
+                                            <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click"><i class="fa fa-sign-out pull-right"></i>Log Out</asp:LinkButton></li>
                                     </ul>
                                 </li>
 
@@ -229,6 +385,33 @@
                                         <span class="badge bg-green" id="alertCountBadge" style="display: none"></span>
                                     </a>
                                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        <%--<asp:Repeater ID="rptAlerts" runat="server" OnItemDataBound="rptAlerts_ItemDataBound">
+                                            <ItemTemplate>
+                                                <asp:HiddenField ID="hfRead" runat="server" Value='<%# Eval("isRead") %>' />
+                                                <li id="liNotify" runat="server">
+                                                    <asp:LinkButton ID="btnNotify" runat="server" OnClick="btnNotify_Click" CommandArgument='<%# Eval("NotificationID") %>'>
+                                                       <%-- <span class="image">
+                                                            <img src='<%# ResolveUrl(Eval("[FromImage]").ToString()) %>' alt="Profile Image" /></span>
+                                                        <span>
+                                                            <span><%# Eval("[From]") %></span>
+                                                            <span class="time"><%# Helper.SpartansHelper.XTimeAgo(Convert.ToDateTime(Eval("Date"))) %></span>
+                                                        </span>--%>
+                                        <%--  <span class="time"><%# Helper.SpartansHelper.XTimeAgo(Convert.ToDateTime(Eval("Date"))) %></span>
+                                                        <span class="message">
+                                                            <%# Eval("Subject") %>
+                                                        </span>
+                                                        <span class="message">
+                                                            <%# Eval("ShortDescription") %>
+                                                        </span>
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ItemTemplate>
+                                            <FooterTemplate>
+                                                <center>
+                                                    <asp:Label ID="lblNotifications" runat="server" Visible="false"></asp:Label>
+                                                </center>
+                                            </FooterTemplate>
+                                        </asp:Repeater>--%>
                                     </ul>
                                 </li>
                             </ul>
@@ -254,7 +437,7 @@
                 <!-- /footer content -->
                 <div id="alert_popover">
                     <div class="wrapper">
-                        <div class="content">
+                        <div class="content" id="notificationPopUp">
                         </div>
                     </div>
                 </div>
@@ -296,7 +479,7 @@
     <script src='<%= ResolveUrl("/vendors/flot-spline/js/jquery.flot.spline.min.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/flot.curvedlines/curvedLines.js") %>'></script>
     <!-- DateJS -->
-    <script src='<%= ResolveUrl("/vendors/DateJS/build/date.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/DateJS//build/date.js") %>'></script>
     <!-- JQVMap -->
     <script src='<%= ResolveUrl("/vendors/jqvmap/dist/jquery.vmap.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/jqvmap/dist/maps/jquery.vmap.world.js") %>'></script>
@@ -311,7 +494,7 @@
     <!-- Switchery -->
     <script src='<%= ResolveUrl("/vendors/switchery/dist/switchery.min.js") %>'></script>
     <!-- Select2 -->
-    <script src='<%= ResolveUrl("/vendors/Select2/dist/js/select2.full.min.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/select2/dist/js/select2.full.min.js") %>'></script>
     <!-- Parsley -->
     <script src='<%= ResolveUrl("/vendors/parsleyjs/dist/parsley.min.js") %>'></script>
     <!-- Bootstrap Colorpicker -->
@@ -333,8 +516,8 @@
     <script src='<%= ResolveUrl("/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/datatables.net-scroller/js/dataTables.scroller.min.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/jszip/dist/jszip.min.js") %>'></script>
-    <script src='<%= ResolveUrl("/vendors/pdfmake/build/pdfmake.min.js") %>'></script>
-    <script src='<%= ResolveUrl("/vendors/pdfmake/build/vfs_fonts.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/pdfmake//build/pdfmake.min.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/pdfmake//build/vfs_fonts.js") %>'></script>
 
     <!-- ECharts -->
     <script src="/vendors/echarts/dist/echarts.min.js"></script>
@@ -342,10 +525,116 @@
         $(".Searchable").select2({
             //data: country
         });
+    </script>
+    <script>
+        var a = {
+            color: ["#26B99A", "#34495E", "#BDC3C7", "#3498DB", "#9B59B6", "#8abb6f", "#759c6a", "#bfd3b7"],
+            title: { itemGap: 8, textStyle: { fontWeight: "normal", color: "#408829" } },
+            dataRange: { color: ["#1f610a", "#97b58d"] }, toolbox: { color: ["#408829", "#408829", "#408829", "#408829"] },
+            tooltip: {
+                backgroundColor: "rgba(0,0,0,0.5)", axisPointer: {
+                    type: "line", lineStyle: { color: "#408829", type: "dashed" },
+                    crossStyle: { color: "#408829" }, shadowStyle: { color: "rgba(200,200,200,0.3)" }
+                }
+            },
+            dataZoom: { dataBackgroundColor: "#eee", fillerColor: "rgba(64,136,41,0.2)", handleColor: "#408829" },
+            grid: { borderWidth: 0 },
+            categoryAxis: {
+                axisLine: { lineStyle: { color: "#408829" } },
+                splitLine: { lineStyle: { color: ["#eee"] } }
+            },
+            valueAxis: {
+                axisLine: { lineStyle: { color: "#408829" } },
+                splitArea: { show: !0, areaStyle: { color: ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"] } }, splitLine: { lineStyle: { color: ["#eee"] } }
+            }, timeline: {
+                lineStyle: { color: "#408829" },
+                controlStyle: { normal: { color: "#408829" }, emphasis: { color: "#408829" } }
+            }, k: {
+                itemStyle: {
+                    normal: {
+                        color: "#68a54a", color0: "#a9cba2",
+                        lineStyle: { width: 1, color: "#408829", color0: "#86b379" }
+                    }
+                }
+            }
+        };
 
+        function onLoad(sender, args) {
+            GraphAjax(sender.get_focusedDate());
+        }
+
+        function FilterGraph(sender, eventArgs) {
+            GraphAjax(eventArgs.get_newValue());
+        }
+        function GraphAjax(Date) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "Dashboard.aspx/GetGraphDetails",
+                data: "{Date:'" + Date + "'}",
+                dataType: "json",
+                success: function (data) {
+                    if (data.d != null) {
+                        var aurguments = data.d.split('+');
+                        BindGraph(aurguments[0], aurguments[1], aurguments[4]);
+                        $("#dateHeading").html(aurguments[2] + " - " + aurguments[3]);
+                    }
+                },
+                onError: function (string) { alert('Error ' + string); }
+            });
+        }
+
+        function BindGraph(Purchases, Sales, Weeklabels) {
+            Purchases = Purchases.split(',');
+            Sales = Sales.split(',');
+            Weeklabels = Weeklabels.split(',');
+            if ($("#SalePurchasesGraph").length) {
+                var f = echarts.init(document.getElementById("SalePurchasesGraph"), a);
+                f.setOption({
+                    title: { text: "Sales/Purchases", subtext: "Graphical view" },
+                    tooltip: { trigger: "axis" }, legend: {
+                        x: 220, y: 40,
+                        data: ["Purchases", "Sales"]
+                    },
+                    toolbox: {
+                        show: !0, feature: {
+                            magicType: {
+                                show: !0,
+                                title: { line: "Line", bar: "Bar" },
+                                type: ["line", "bar"]
+                            },
+                            saveAsImage: { show: !0, title: "Download" }
+                        }
+                    },
+                    calculable: !0,
+                    xAxis: [{
+                        type: "category", boundaryGap: !1,
+                        data: Weeklabels,
+                        axisLabel: {
+                            interval: 0,
+                        }
+                    }],
+                    yAxis: [{ type: "value" }],
+
+                    series: [{
+                        name: "Purchases", type: "line",
+                        smooth: !0,
+                        itemStyle: { normal: { areaStyle: { type: "default" } } },
+                        data: Purchases
+                    },
+                    {
+                        name: "Sales", type: "line", smooth: !0,
+                        itemStyle: { normal: { areaStyle: { type: "default" } } },
+                        data: Sales
+                    }]
+                })
+            }
+        }
     </script>
     <!-- Custom Theme Scripts -->
     <script src='<%= ResolveUrl("/build/js/custom.min.js") %>'></script>
+
+
 
 </body>
 </html>
