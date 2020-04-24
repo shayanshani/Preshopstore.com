@@ -40,10 +40,12 @@
 
     <%--StockIn With Ajax--%>
     <script type="text/javascript">
-        var Brands = [], Products = [];
+        var Brands = [], Products = [], Color = [], Sizes = [];
         $(document).ready(function () {
             GetBrands();
             GetProducts();
+            GetColors();
+            GetSizes();
             $("#btnSubmit").on('click', function () {
                 if (isValid()) {
                     SaveStock();
@@ -215,10 +217,16 @@
                 var saleDataHtml = '';
                 saleDataHtml += "<tr id='tr" + RowId + "'>";
                 var barcode ="<%= Convert.ToBoolean(config.IsBarCode) %>";
+                var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+                var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
                 if (barcode == "True")
                     saleDataHtml += "<td align='center'><input type='text' disabled='disabled' class='form-control subtotalInputBarCode' id='txtBarCode" + RowId + "'  /></td>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
-                saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);'></select></td>";
+                if (IsColor == "2")
+                    saleDataHtml += "<td align='center'><select id='ddlColors" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                if (HaveSizes == "True")
+                    saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtQty" + RowId + "' autocomplete='off' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' /></td>";
@@ -226,6 +234,8 @@
                 saleDataHtml += "<td align='center'><a href='javascript:;' onclick='Remove(" + RowId + ");' style='color:red'> <i class='fa fa-close' Style='font-size: 15px!important'></i></a></td></tr>";
                 tblStockItems.append(saleDataHtml);
                 FillBrands(RowId, -1);
+                if (IsColor == "2")
+                    FillColors(RowId, -1);
                 $("#btnSubmit").attr('disabled', false);
                 CalculateBill();
                 CalBill();
@@ -240,8 +250,8 @@
             for (var i = 0; i < TotalStock; i++) {
                 Stock.push({
                     StockId: $("#hfStockId" + i).length > 0 ? $("#hfStockId" + i).val() : null,
-                    SizeId: "0",
-                    ColorId: "0",
+                    SizeId: $("#ddlSizes" + i).val(),
+                    ColorId: $("#ddlColors" + i).val(),
                     StockColorOrFlavorId: "0",
                     CompanyId: $("#ddlCompany" + i).val(),
                     ProductID: $("#ddlProducts" + i).val(),
@@ -330,6 +340,31 @@
             });
         }
 
+        function GetColors() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "StockEntry.aspx/GetColors",
+                dataType: "json",
+                success: function (res) {
+                    Color = res.d;
+                }
+            });
+        }
+
+        function GetSizes() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "StockEntry.aspx/GetSizes",
+                dataType: "json",
+                success: function (res) {
+                    Sizes = res.d;
+                }
+            });
+        }
+
+
         function FillBrands(Index, SelectedValue) {
             if (Brands.length == 0)
                 GetBrands();
@@ -342,6 +377,7 @@
             })
             $(BrandDropdownId).val(SelectedValue);
             $("#ddlProducts" + Index).append($("<option></option>").val("-1").html("Select Product"));
+            $("#ddlColors" + Index).append($("<option></option>").val("-1").html("Select Color"));
         }
 
         function FillProducts(CompanyId, Index, SelectedValue) {
@@ -356,24 +392,35 @@
                 $(ProductsDropDown).append($("<option></option>").val(value.ProductID).html(value.Product));
             })
             $(ProductsDropDown).val(SelectedValue);
-            //$.ajax({
-            //    type: "POST",
-            //    contentType: "application/json; charset=utf-8",
-            //    url: "StockEntry.aspx/GetProducts",
-            //    data: '{CompanyID: ' + CompanyId + '}',
-            //    beforeSend: function () {
-            //        $(ProductsDropDown).prepend($('<option></option>').html('Loading products...'));
-            //    },
-            //    dataType: "json",
-            //    success: function (res) {
-            //        $(ProductsDropDown).empty();
-            //        $(ProductsDropDown).append($("<option></option>").val("-1").html("Select Product"));
-            //        $.each(res.d, function (data, value) {
-            //            $(ProductsDropDown).append($("<option></option>").val(value.ProductID).html(value.Product));
-            //        })
-            //        $(ProductsDropDown).val(SelectedValue);
-            //    }
-            //});
+        }
+
+        function FillColors(Index, SelectedValue) {
+            if (Brands.length == 0)
+                GetColors();
+            var ColorDropdownId = "#ddlColors" + Index;
+            $(ColorDropdownId).empty();
+            $(ColorDropdownId).append($("<option></option>").val("-1").html("Select Color"));
+            $.each(Color, function (data, value) {
+                $(ColorDropdownId).append($("<option style='background-color:" + value.ColorCode + "'></option>").val(value.ColorID).html(value.ColorName));
+            })
+            $(ColorDropdownId).val(SelectedValue);
+        }
+
+        function GetProductSizes(ProductId, Index, SelectedValue) {
+            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
+            if (HaveSizes == "True") {
+                $("#ddlProducts" + Index).removeClass("error");
+                var SizesDropDown = "#ddlSizes" + Index;
+                $(SizesDropDown).empty();
+                $(SizesDropDown).append($("<option></option>").val("-1").html("Select Size"));
+                var FilteredSizes = Sizes.filter(function (e) {
+                    return e.ProductID == ProductId;
+                });
+                $.each(FilteredSizes, function (data, value) {
+                    $(SizesDropDown).append($("<option></option>").val(value.SizeID).html(value.Size));
+                })
+                $(SizesDropDown).val(SelectedValue);
+            }
         }
 
         function DeleteItem(StockID) {
@@ -532,6 +579,8 @@
                                         <th runat="server" id="thBarCode"><i class="fa fa-barcode"></i>BarCode</th>
                                         <th>Brand</th>
                                         <th>Product</th>
+                                        <th runat="server" id="thColor" visible="false">Color</th>
+                                        <th runat="server" id="thSzes" visible="false">Size</th>
                                         <th>Qty</th>
                                         <th>Price(Per Item)</th>
                                         <th>Sale Price(Per Item)</th>
@@ -543,7 +592,7 @@
                                 </tbody>
                                 <tfoot id="ManualEntryButton" runat="server">
                                     <tr id="trFooter">
-                                        <td colspan="8">
+                                        <td colspan="9">
                                             <button id="btnAddNewRow" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new stock</button>
                                         </td>
                                     </tr>

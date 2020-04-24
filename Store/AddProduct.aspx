@@ -238,7 +238,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="row" id="rowFlavourColor" runat="server">
+                                                <div class="row" id="rowFlavourColor" runat="server" style="display:none">
                                                     <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
                                                         <div class="form-group">
                                                             <label></label>
@@ -249,6 +249,30 @@
                                                                 Flavour:
                                                                
                                                                 <input type="radio" class="flat" name="gender" id="chkFlavour" runat="server" />
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" id="divColorOnly" runat="server" style="display:none">
+                                                    <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
+                                                        <div class="form-group">
+                                                            <label></label>
+                                                            <p>
+                                                                Color:
+                                                                <input type="checkbox" class="flat" name="gender" id="chkColorOnly" runat="server" checked="" />&nbsp&nbsp
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" id="divFlavourOnly" runat="server" style="display:none">
+                                                    <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
+                                                        <div class="form-group">
+                                                            <label></label>
+                                                            <p>
+                                                                Falvour:
+                                                                <input type="checkbox" class="flat" name="gender" id="chkFlavourOnly" runat="server" checked="" />&nbsp&nbsp
                                                             </p>
                                                         </div>
                                                     </div>
@@ -274,7 +298,6 @@
                                 <th>Brand</th>
                                 <th>Product Name</th>
                                 <th runat="server" id="thDescription">Description</th>
-                                <th id="thAttr" runat="server">Attributes</th>
                                 <th id="thActions" runat="server">Action(s)</th>
                             </tr>
                         </thead>
@@ -287,7 +310,6 @@
                                         <td><%# Eval("[Product]") %> &nbsp&nbsp
                                             <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" /></td>
                                         <td runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="white-space: pre-line!important"><%# Eval("[Description]") %></td>
-                                        <td id="tdAttr" runat="server"><%# Convert.ToInt32(Eval("[IsColor]"))==1 ? "Colors" : "Flavours" %></td>
                                         <td class="center" id="tdActions" runat="server">
                                             <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("ProductID") %>'><span class="fa fa-edit" style="font-size: 22px!important;"></span></asp:LinkButton>
                                         </td>

@@ -8,6 +8,9 @@
             border-bottom: 1px solid #000 !important;
             text-align: center !important;
         }
+               td {
+    vertical-align: middle!important;
+}
     </style>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -29,7 +32,7 @@
                                 <th>Product</th>
                                 <th>Company</th>
                                 <th>Total Items</th>
-                                <th id="thAttributes" runat="server">Attributes</th>
+                                <th id="thAttributes" runat="server">Stock Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,7 +69,7 @@
                                                                     <asp:Repeater ID="rptColors" runat="server">
                                                                         <ItemTemplate>
                                                                             <tr>
-                                                                                <td><%# Eval("Color") %></td>
+                                                                                <td style='background-color:<%# Eval("ColorCode")%>;color:white'><%# Eval("Color") %></td>
                                                                                 <td><%# Eval("Qty") %></td>
                                                                             </tr>
                                                                         </ItemTemplate>
