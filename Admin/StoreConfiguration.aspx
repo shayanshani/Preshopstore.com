@@ -44,6 +44,9 @@
                 $("#<%= chkSingleCategory.ClientID%>").prop('checked', false);
                 $("#<%= DivCategorySetup.ClientID%>").css('display', 'none');
             });
+            $("#<%= chkResendEmail.ClientID%>").click(function () {
+                $("#<%= divEmailId.ClientID%>").ToggleSectionDisplay();
+             });
         });
     </script>
     <style>
