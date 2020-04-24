@@ -241,7 +241,7 @@
                         </div>
                         <hr />
                         <div class="row">
-                            <h5>Store Types
+                            <h5>Assign Categories
                             </h5>
                             <hr />
                             <div id="CheckboxesRepeaterCat">
