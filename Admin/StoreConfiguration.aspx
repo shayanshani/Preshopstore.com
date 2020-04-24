@@ -240,7 +240,7 @@
 
                         </div>
                         <hr />
-                        <div class="row">
+                        <div class="row" id="divCategories" runat="server">
                             <h5>Assign Categories
                             </h5>
                             <hr />
