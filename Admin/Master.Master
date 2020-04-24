@@ -30,7 +30,7 @@
     <link href="/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
     --%>
     <!-- Select2 -->
-    <link href="/vendors//Select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="/vendors/Select2/dist/css/select2.min.css" rel="stylesheet">
     <!-- Switchery -->
     <link href="/vendors/switchery/dist/switchery.min.css" rel="stylesheet" />
     <!-- starrr -->
@@ -53,8 +53,8 @@
 
 
     <!-- Custom Theme Style -->
-    <link href="//build/css/custom.min.css" rel="stylesheet">
-    <link href="//Select2/CustomCss.css" rel="stylesheet" />
+    <link href="/build/css/custom.min.css" rel="stylesheet">
+    <link href="/Select2/CustomCss.css" rel="stylesheet" />
     <script type="text/javascript">
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
@@ -296,7 +296,7 @@
     <script src='<%= ResolveUrl("/vendors/flot-spline/js/jquery.flot.spline.min.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/flot.curvedlines/curvedLines.js") %>'></script>
     <!-- DateJS -->
-    <script src='<%= ResolveUrl("/vendors/DateJS//build/date.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/DateJS/build/date.js") %>'></script>
     <!-- JQVMap -->
     <script src='<%= ResolveUrl("/vendors/jqvmap/dist/jquery.vmap.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/jqvmap/dist/maps/jquery.vmap.world.js") %>'></script>
@@ -311,7 +311,7 @@
     <!-- Switchery -->
     <script src='<%= ResolveUrl("/vendors/switchery/dist/switchery.min.js") %>'></script>
     <!-- Select2 -->
-    <script src='<%= ResolveUrl("/vendors//Select2/dist/js/select2.full.min.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/Select2/dist/js/select2.full.min.js") %>'></script>
     <!-- Parsley -->
     <script src='<%= ResolveUrl("/vendors/parsleyjs/dist/parsley.min.js") %>'></script>
     <!-- Bootstrap Colorpicker -->
@@ -333,8 +333,8 @@
     <script src='<%= ResolveUrl("/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/datatables.net-scroller/js/dataTables.scroller.min.js") %>'></script>
     <script src='<%= ResolveUrl("/vendors/jszip/dist/jszip.min.js") %>'></script>
-    <script src='<%= ResolveUrl("/vendors/pdfmake//build/pdfmake.min.js") %>'></script>
-    <script src='<%= ResolveUrl("/vendors/pdfmake//build/vfs_fonts.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/pdfmake/build/pdfmake.min.js") %>'></script>
+    <script src='<%= ResolveUrl("/vendors/pdfmake/build/vfs_fonts.js") %>'></script>
 
     <!-- ECharts -->
     <script src="/vendors/echarts/dist/echarts.min.js"></script>
