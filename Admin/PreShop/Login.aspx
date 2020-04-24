@@ -11,19 +11,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Administration Login</title>
     <!-- Bootstrap -->
-    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
-    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-    <link href="../css/CheckBoxes.css" rel="stylesheet" />
+    <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="/css/CheckBoxes.css" rel="stylesheet" />
     <!-- Animate.css -->
-    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+    <link href="/vendors/animate.css/animate.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link href="/build/css/custom.min.css" rel="stylesheet">
     <style>
         .login_content form input[type=text], .login_content form input[type=email], .login_content form input[type=password] {
             margin: 0px !important;
@@ -189,12 +189,12 @@
 </body>
 
 <!-- jQuery -->
-<script src='<%= ResolveUrl("../vendors/jquery/dist/jquery.min.js") %>'></script>
+<script src='<%= ResolveUrl("/vendors/jquery/dist/jquery.min.js") %>'></script>
 <!-- Bootstrap -->
-<script src='<%= ResolveUrl("../vendors/bootstrap/dist/js/bootstrap.min.js") %>'></script>
+<script src='<%= ResolveUrl("/vendors/bootstrap/dist/js/bootstrap.min.js") %>'></script>
 
 <!-- iCheck -->
-<script src='<%= ResolveUrl("../vendors/iCheck/icheck.min.js") %>'></script>
+<script src='<%= ResolveUrl("/vendors/iCheck/icheck.min.js") %>'></script>
 
 
 </html>
