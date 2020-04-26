@@ -347,6 +347,7 @@
                 url: "StockEntry.aspx/GetColors",
                 dataType: "json",
                 success: function (res) {
+                    console.log(res.d);
                     Color = res.d;
                 }
             });
@@ -371,7 +372,6 @@
             var BrandDropdownId = "#ddlCompany" + Index;
             $(BrandDropdownId).empty();
             $(BrandDropdownId).append($("<option></option>").val("-1").html("Select Brand"));
-            console.log(Brands);
             $.each(Brands, function (data, value) {
                 $(BrandDropdownId).append($("<option></option>").val(value.CompanyID).html(value.Company));
             })
@@ -395,7 +395,7 @@
         }
 
         function FillColors(Index, SelectedValue) {
-            if (Brands.length == 0)
+            if (Color.length == 0)
                 GetColors();
             var ColorDropdownId = "#ddlColors" + Index;
             $(ColorDropdownId).empty();
