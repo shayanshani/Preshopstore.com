@@ -224,10 +224,10 @@
                     saleDataHtml += "<td align='center'><input type='text' disabled='disabled' class='form-control subtotalInputBarCode' id='txtBarCode" + RowId + "'  /></td>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
                 saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);'></select></td>";
-                if (IsColor == "2")
-                    saleDataHtml += "<td align='center'><select id='ddlColors" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 if (HaveSizes == "True")
                     saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                if (IsColor == "2")
+                    saleDataHtml += "<td align='center'><select id='ddlColors" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtQty" + RowId + "' autocomplete='off' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' /></td>";
@@ -248,11 +248,13 @@
             $tableStock = $('#tblStockItems > tbody  > tr');
             var Stock = [];
             var TotalStock = $tableStock.length;
+            var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
             for (var i = 0; i < TotalStock; i++) {
                 Stock.push({
                     StockId: $("#hfStockId" + i).length > 0 ? $("#hfStockId" + i).val() : null,
-                    SizeId: $("#ddlSizes" + i).val(),
-                    ColorId: $("#ddlColors" + i).val(),
+                    SizeId: (HaveSizes == "True") ? $("#ddlSizes" + i).val() : "0",
+                    ColorId: (IsColor == "2") ? $("#ddlColors" + i).val() : "0",
                     StockColorOrFlavorId: "0",
                     CompanyId: $("#ddlCompany" + i).val(),
                     ProductID: $("#ddlProducts" + i).val(),

@@ -58,7 +58,7 @@
                                                         <asp:HiddenField ID="hfSizeID" runat="server" Value='<%# Eval("SizeID") %>' />
                                                         <asp:HiddenField ID="hfProductID" runat="server" Value='<%# Eval("ProductId") %>' />
                                                         <tr>
-                                                            <td style="width: 25%!important">
+                                                            <td style="width: 25%!important;background-color:<%# Eval("ColorCode")%>">
                                                                 <%# Eval("Size") %>
                                                             </td>
                                                             <td><%# Eval("Qty") %>
