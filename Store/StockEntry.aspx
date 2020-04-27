@@ -41,6 +41,7 @@
     <%--StockIn With Ajax--%>
     <script type="text/javascript">
         var Brands = [], Products = [], Color = [], Sizes = [];
+        GetColors();
         $(document).ready(function () {
             GetBrands();
             GetProducts();
