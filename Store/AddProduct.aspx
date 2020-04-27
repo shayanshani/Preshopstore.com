@@ -41,6 +41,66 @@
         .editor-wrapper {
             min-height: 190px !important;
         }
+
+        #example {
+            text-align: center;
+        }
+
+            #example .demo-container {
+                display: inline-block;
+                text-align: left;
+            }
+
+        .demo-container .RadUpload .ruUploadProgress {
+            width: 210px;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: top;
+        }
+
+        .ruBrowse {
+            color: #fff !important;
+            background-color: #26B99A !important;
+            border-color: #169F85 !important;
+            background-image: none !important;
+            margin-bottom: 5px !important;
+            margin-right: 5px !important;
+            display: inline-block !important;
+            padding: 5px 10px !important;
+            margin-bottom: 0 !important;
+            font-size: 12px !important;
+            font-weight: 400 !important;
+            line-height: 1.5 !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+            touch-action: manipulation !important;
+            cursor: pointer !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            background-image: none !important;
+            border: 1px solid transparent !important;
+            border-radius: 4px !important;
+        }
+
+        .RadUpload_Default .ruSelectWrap .ruBrowse:hover {
+            background-color: #398439 !important;
+            cursor: pointer;
+        }
+
+        div.RadUpload_Default .ruBrowse::before {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            margin-right: 5px !important;
+            -webkit-font-smoothing: antialiased;
+            content: "\f093";
+        }
     </style>
     <script>
         function HideLabel() {
@@ -130,7 +190,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class='<%=Convert.ToBoolean(config.StandAlonePortal) ? "col-sm-12 col-md-12 col-lg-12" : "col-sm-6 col-md-6 col-lg-6" %>'>
+                                                    <div class='col-sm-12 col-md-12 col-lg-12'>
                                                         <div class="form-group">
                                                             <label>
                                                                 Product Name:&nbsp;
@@ -142,7 +202,42 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-sm-2" style='<%=Convert.ToBoolean(config.StandAlonePortal) ? "display: none": "display: block" %>'>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4" id="divColorOnly" runat="server" style="display: none">
+                                                        <div class="form-group">
+                                                            <label></label>
+                                                            <p>
+                                                                Color:
+                                                                <input type="checkbox" class="flat" name="gender" id="chkColorOnly" runat="server" checked="" />&nbsp&nbsp
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4" id="rowFlavourColor" runat="server" style="display: none">
+                                                        <div class="form-group">
+                                                            <label></label>
+                                                            <p>
+                                                                Color:
+                                                               
+                                                                <input type="radio" class="flat" name="gender" id="chkColor" runat="server" checked="" />&nbsp&nbsp
+                                                                Flavour:
+                                                               
+                                                                <input type="radio" class="flat" name="gender" id="chkFlavour" runat="server" />
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4" id="divFlavourOnly" runat="server" style="display: none">
+                                                        <div class="form-group">
+                                                            <label></label>
+                                                            <p>
+                                                                Falvour:
+                                                                <input type="checkbox" class="flat" name="gender" id="chkFlavourOnly" runat="server" checked="" />&nbsp&nbsp
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="uploadingArea" runat="server">
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label>
                                                                 &nbsp<span class="required">
@@ -150,7 +245,28 @@
                                                                     <asp:RegularExpressionValidator ID="fileUploadReg" runat="server" Display="Dynamic" ControlToValidate="flvProductUpload" ValidationExpression="^.*\.((j|J)(p|P)(e|E)?(g|G)|(p|P)(n|N)(g|G))$" CssClass="has-error" ErrorMessage="Please choose only PNG or JPG format" ValidationGroup="validation"></asp:RegularExpressionValidator>
                                                                 </span>
                                                             </label>
-                                                            <asp:FileUpload ID="flvProductUpload" runat="server" AllowMultiple="true" ClientIDMode="Static" />
+                                                            <asp:FileUpload ID="flvProductUpload" Visible="false" runat="server" AllowMultiple="true" ClientIDMode="Static" />
+
+                                                            <div class="demo-container size-narrow" runat="server" id="DemoContainer1">
+                                                                <telerik:RadAsyncUpload ClientIDMode="Static" MultipleFileSelection="Automatic" OnFileUploaded="AsyncUpload1_FileUploaded"
+                                                                    ToolTip="Upload Images of your product" RenderMode="Lightweight"
+                                                                    runat="server" ID="AsyncUpload1" ChunkSize="1048576" MaxFileInputsCount="8" HideFileInput="true">
+                                                                    <Localization Select="Upload Images" />
+                                                                </telerik:RadAsyncUpload>
+                                                                <telerik:RadProgressArea RenderMode="Lightweight" runat="server" ID="RadProgressArea1" />
+                                                            </div>
+                                                            <telerik:RadAjaxManager runat="server" ID="RadAjaxManager1" DefaultLoadingPanelID="RadAjaxLoadingPanel1">
+                                                                <AjaxSettings>
+                                                                    <telerik:AjaxSetting AjaxControlID="ConfiguratorPanel1">
+                                                                        <UpdatedControls>
+                                                                            <telerik:AjaxUpdatedControl ControlID="ConfiguratorPanel1" />
+                                                                            <telerik:AjaxUpdatedControl ControlID="DemoContainer1" />
+                                                                        </UpdatedControls>
+                                                                    </telerik:AjaxSetting>
+                                                                </AjaxSettings>
+                                                            </telerik:RadAjaxManager>
+
+                                                            <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" />
                                                         </div>
                                                     </div>
                                                     <div id="DivProductImage" runat="server" clientidmode="Static" style="display: none" class="col-sm-4">
@@ -158,6 +274,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
+                                                    <div class="col-sm-6 col-md-6 col-lg-6" style='<%=Convert.ToBoolean(config.StandAlonePortal) ? "display: none": "display: block" %>; padding-top: 10px; padding-bottom: 10px;'>
+                                                        <span class="pull-right" style="margin-right: 92px;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <b><i class="fa fa-arrow-down"></i></b>
+                                                            <br />
+                                                            <a href="#" id="imageLink" target="_blank" style="color: #0094ff">Click here to find & download Image from google</a>
+                                                        </span>
+                                                    </div>
                                                     <div class="col-sm-6 col-md-6 col-lg-6" id="DivUnits" runat="server">
                                                         <div class="form-group">
                                                             <label>
@@ -169,12 +291,6 @@
                                                                 </asp:DropDownList>
                                                             </p>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-6 col-lg-6" style='<%=Convert.ToBoolean(config.StandAlonePortal) ? "display: none": "display: block" %>;padding-top: 10px; padding-bottom: 10px;'>
-                                                          <span class="pull-right" style="margin-right: 92px;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <b><i class="fa fa-arrow-down"></i></b>
-                                                            <br />
-                                                            <a href="#" id="imageLink" target="_blank" style="color: #0094ff">Click here to find & download Image from google</a>
-                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="row" style='<%=Convert.ToBoolean(config.StandAlonePortal) ? "display: none": "display: block" %>'>
@@ -237,46 +353,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="row" id="rowFlavourColor" runat="server" style="display:none">
-                                                    <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
-                                                        <div class="form-group">
-                                                            <label></label>
-                                                            <p>
-                                                                Color:
-                                                               
-                                                                <input type="radio" class="flat" name="gender" id="chkColor" runat="server" checked="" />&nbsp&nbsp
-                                                                Flavour:
-                                                               
-                                                                <input type="radio" class="flat" name="gender" id="chkFlavour" runat="server" />
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row" id="divColorOnly" runat="server" style="display:none">
-                                                    <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
-                                                        <div class="form-group">
-                                                            <label></label>
-                                                            <p>
-                                                                Color:
-                                                                <input type="checkbox" class="flat" name="gender" id="chkColorOnly" runat="server" checked="" />&nbsp&nbsp
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row" id="divFlavourOnly" runat="server" style="display:none">
-                                                    <div class="col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
-                                                        <div class="form-group">
-                                                            <label></label>
-                                                            <p>
-                                                                Falvour:
-                                                                <input type="checkbox" class="flat" name="gender" id="chkFlavourOnly" runat="server" checked="" />&nbsp&nbsp
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -297,7 +373,7 @@
                                 <th runat="server" id="thCategory">Category</th>
                                 <th>Brand</th>
                                 <th>Product Name</th>
-                                <th runat="server" id="thDescription">Description</th>
+                                <%--<th runat="server" id="thDescription" style="display:none">Description</th>--%>
                                 <th id="thActions" runat="server">Action(s)</th>
                             </tr>
                         </thead>
@@ -309,7 +385,7 @@
                                         <td><%# Eval("[Company]") %></td>
                                         <td><%# Eval("[Product]") %> &nbsp&nbsp
                                             <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" /></td>
-                                        <td runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="white-space: pre-line!important"><%# Eval("[Description]") %></td>
+                                        <%--<td style="display:none;white-space: pre-line!important"><%# Eval("[Description]") %></td>--%>
                                         <td class="center" id="tdActions" runat="server">
                                             <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("ProductID") %>'><span class="fa fa-edit" style="font-size: 22px!important;"></span></asp:LinkButton>
                                         </td>
