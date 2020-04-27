@@ -374,6 +374,7 @@
                                 <th runat="server" id="thCategory">Category</th>
                                 <th>Brand</th>
                                 <th>Product Name</th>
+                                <th>Default Image<small>(Thumbnail)</small></th>
                                 <%--<th runat="server" id="thDescription" style="display:none">Description</th>--%>
                                 <th id="thActions" runat="server">Action(s)</th>
                             </tr>
@@ -384,17 +385,11 @@
                                     <tr class="even gradeX">
                                         <td runat="server" visible='<%# Convert.ToInt32(config.SingleCategory) <= 0 & !Convert.ToBoolean(config.StandAlonePortal) %>'><%# Eval("[Category]") %></td>
                                         <td><%# Eval("[Company]") %></td>
+                                        <td style="white-space: pre-line!important">
+                                            <%# Eval("[Product]") %>
+                                        </td>
                                         <td>
-                                            <table style="width:100%!important">
-                                                <tr>
-                                                    <td style="white-space: pre-wrap!important;">
-                                                        <%# Eval("[Product]") %> 
-                                                    </td>
-                                                    <td>
-                                                        <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" />
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" />
                                         </td>
                                         <%--<td style="display:none;white-space: pre-line!important"><%# Eval("[Description]") %></td>--%>
                                         <td class="center" id="tdActions" runat="server">
