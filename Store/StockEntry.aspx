@@ -41,12 +41,12 @@
     <%--StockIn With Ajax--%>
     <script type="text/javascript">
         var Brands = [], Products = [], Color = [], Sizes = [];
-        GetColors();
         $(document).ready(function () {
             GetBrands();
             GetProducts();
             GetColors();
             GetSizes();
+            $("#btnAddNewRow").removeAttr("disabled");
             $("#btnSubmit").on('click', function () {
                 if (isValid()) {
                     SaveStock();
@@ -594,7 +594,7 @@
                                 <tfoot id="ManualEntryButton" runat="server">
                                     <tr id="trFooter">
                                         <td colspan="9">
-                                            <button id="btnAddNewRow" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new stock</button>
+                                            <button id="btnAddNewRow" disabled="disabled" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new stock</button>
                                         </td>
                                     </tr>
                                 </tfoot>
