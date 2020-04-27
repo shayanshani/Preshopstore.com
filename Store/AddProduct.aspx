@@ -385,9 +385,9 @@
                                         <td runat="server" visible='<%# Convert.ToInt32(config.SingleCategory) <= 0 & !Convert.ToBoolean(config.StandAlonePortal) %>'><%# Eval("[Category]") %></td>
                                         <td><%# Eval("[Company]") %></td>
                                         <td>
-                                            <table>
+                                            <table style="width:100%!important">
                                                 <tr>
-                                                    <td style="white-space: pre-line!important">
+                                                    <td style="white-space: pre-wrap!important;">
                                                         <%# Eval("[Product]") %> 
                                                     </td>
                                                     <td>
