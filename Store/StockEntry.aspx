@@ -157,8 +157,12 @@
 
         function ValidateRow(Index) {
             var barcode = "<%= Convert.ToBoolean(config.IsBarCode) %>";
+            var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
             var ddlCompany = $("#ddlCompany" + Index);
             var ddlProducts = $("#ddlProducts" + Index);
+            var ddlColors = $("#ddlColors" + Index);
+            var ddlSizes = $("#ddlSizes" + Index);
             var txtQty = $("#txtQty" + Index);
             var txtPrice = $("#txtPrice" + Index);
             var txtSalePrice = $("#txtSalePrice" + Index);
@@ -187,6 +191,24 @@
             }
             else
                 ddlProducts.removeClass("error");
+            if (IsColor == "2") {
+                if (ddlColors.val() == "-1") {
+                    ddlColors.addClass("error");
+                    return false;
+                }
+                else
+                    ddlColors.removeClass("error");
+            }
+
+            if (HaveSizes == "True") {
+                if (ddlSizes.val() == "-1") {
+                    ddlSizes.addClass("error");
+                    return false;
+                }
+            }
+            else
+                ddlSizes.removeClass("error");
+
 
             if (txtQty.val() == "") {
                 txtQty.addClass("error");
