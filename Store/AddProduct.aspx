@@ -253,21 +253,22 @@
                                                                     runat="server" ID="AsyncUpload1" ChunkSize="1048576" MaxFileInputsCount="8" HideFileInput="true">
                                                                     <Localization Select="Upload Images" />
                                                                 </telerik:RadAsyncUpload>
-                                                                <telerik:RadProgressArea RenderMode="Lightweight" runat="server" ID="RadProgressArea1" />
                                                             </div>
-                                                            <telerik:RadAjaxManager runat="server" ID="RadAjaxManager1" DefaultLoadingPanelID="RadAjaxLoadingPanel1">
-                                                                <AjaxSettings>
-                                                                    <telerik:AjaxSetting AjaxControlID="ConfiguratorPanel1">
-                                                                        <UpdatedControls>
-                                                                            <telerik:AjaxUpdatedControl ControlID="ConfiguratorPanel1" />
-                                                                            <telerik:AjaxUpdatedControl ControlID="DemoContainer1" />
-                                                                        </UpdatedControls>
-                                                                    </telerik:AjaxSetting>
-                                                                </AjaxSettings>
-                                                            </telerik:RadAjaxManager>
-
-                                                            <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" />
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <telerik:RadProgressArea RenderMode="Lightweight" runat="server" ID="RadProgressArea1" />
+                                                        <telerik:RadAjaxManager runat="server" ID="RadAjaxManager1" DefaultLoadingPanelID="RadAjaxLoadingPanel1">
+                                                            <AjaxSettings>
+                                                                <telerik:AjaxSetting AjaxControlID="ConfiguratorPanel1">
+                                                                    <UpdatedControls>
+                                                                        <telerik:AjaxUpdatedControl ControlID="ConfiguratorPanel1" />
+                                                                        <telerik:AjaxUpdatedControl ControlID="DemoContainer1" />
+                                                                    </UpdatedControls>
+                                                                </telerik:AjaxSetting>
+                                                            </AjaxSettings>
+                                                        </telerik:RadAjaxManager>
+                                                        <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" />
                                                     </div>
                                                     <div id="DivProductImage" runat="server" clientidmode="Static" style="display: none" class="col-sm-4">
                                                         <img id="ProductImage" runat="server" clientidmode="Static" src="#" style="height: 115px;" />
@@ -383,8 +384,18 @@
                                     <tr class="even gradeX">
                                         <td runat="server" visible='<%# Convert.ToInt32(config.SingleCategory) <= 0 & !Convert.ToBoolean(config.StandAlonePortal) %>'><%# Eval("[Category]") %></td>
                                         <td><%# Eval("[Company]") %></td>
-                                        <td><%# Eval("[Product]") %> &nbsp&nbsp
-                                            <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" /></td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td style="white-space: pre-line!important">
+                                                        <%# Eval("[Product]") %> 
+                                                    </td>
+                                                    <td>
+                                                        <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
                                         <%--<td style="display:none;white-space: pre-line!important"><%# Eval("[Description]") %></td>--%>
                                         <td class="center" id="tdActions" runat="server">
                                             <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("ProductID") %>'><span class="fa fa-edit" style="font-size: 22px!important;"></span></asp:LinkButton>
@@ -423,7 +434,7 @@
                 hfDescription.val(null);
                 hfImagePath.val(null);
                 document.getElementById('imageLink').href = "#";
-                document.getElementById("<%=reqFileUpload.ClientID%>").enabled = true;
+                <%--document.getElementById("<%=reqFileUpload.ClientID%>").enabled = true;--%>
             });
         });
         function openModal(id) {
