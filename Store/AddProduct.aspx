@@ -241,8 +241,8 @@
                                                         <div class="form-group">
                                                             <label>
                                                                 &nbsp<span class="required">
-                                                                    <asp:RequiredFieldValidator ID="reqFileUpload" runat="server" CssClass="has-error" Display="Dynamic" SetFocusOnError="true" ControlToValidate="flvProductUpload" ErrorMessage="Choose an image" ValidationGroup="validation"></asp:RequiredFieldValidator>
-                                                                    <asp:RegularExpressionValidator ID="fileUploadReg" runat="server" Display="Dynamic" ControlToValidate="flvProductUpload" ValidationExpression="^.*\.((j|J)(p|P)(e|E)?(g|G)|(p|P)(n|N)(g|G))$" CssClass="has-error" ErrorMessage="Please choose only PNG or JPG format" ValidationGroup="validation"></asp:RegularExpressionValidator>
+                                                                    <asp:RequiredFieldValidator ID="reqFileUpload" Enabled="false" runat="server" CssClass="has-error" Display="Dynamic" SetFocusOnError="true" ControlToValidate="flvProductUpload" ErrorMessage="Choose an image" ValidationGroup="validation"></asp:RequiredFieldValidator>
+                                                                    <asp:RegularExpressionValidator ID="fileUploadReg" Enabled="false" runat="server" Display="Dynamic" ControlToValidate="flvProductUpload" ValidationExpression="^.*\.((j|J)(p|P)(e|E)?(g|G)|(p|P)(n|N)(g|G))$" CssClass="has-error" ErrorMessage="Please choose only PNG or JPG format" ValidationGroup="validation"></asp:RegularExpressionValidator>
                                                                 </span>
                                                             </label>
                                                             <asp:FileUpload ID="flvProductUpload" Visible="false" runat="server" AllowMultiple="true" ClientIDMode="Static" />
@@ -389,11 +389,16 @@
                                             <%# Eval("[Product]") %>
                                         </td>
                                         <td>
-                                            <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" />
+                                            <a href="ProductImages.aspx?p=<%# Eval("ProductID") %>">
+                                                <img src='<%# PreShop.Common.StoreHostName+Eval("Image") %>' runat="server" visible='<%# !Convert.ToBoolean(config.StandAlonePortal) %>' style="height: 115px; width: 100px;" />
+                                            </a>
                                         </td>
                                         <%--<td style="display:none;white-space: pre-line!important"><%# Eval("[Description]") %></td>--%>
                                         <td class="center" id="tdActions" runat="server">
-                                            <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("ProductID") %>'><span class="fa fa-edit" style="font-size: 22px!important;"></span></asp:LinkButton>
+                                            <a href="ProductImages.aspx?p=<%# Eval("ProductID") %>" title="View Images">
+                                                <i class="fa fa-eye" style="font-size: 16px!important;"></i>
+                                            </a>|
+                                            <asp:LinkButton ID="btnEdit" runat="server" OnClick="btnEdit_Click" CommandArgument='<%# Eval("ProductID") %>'><span class="fa fa-edit" style="font-size: 16px!important;"></span></asp:LinkButton>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
