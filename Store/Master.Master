@@ -15,9 +15,9 @@
     <!-- Font Awesome -->
     <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/CheckBoxes.css" rel="stylesheet" />
-    <!-- NProgress -->
+   <%-- <!-- NProgress -->
     <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
+  --%>  <!-- iCheck -->
     <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
     <!-- bootstrap-progressbar -->
@@ -448,8 +448,8 @@
 
     <!-- FastClick -->
     <script src='<%= ResolveUrl("/vendors/fastclick/lib/fastclick.js") %>'></script>
-    <!-- NProgress -->
-    <script src='<%= ResolveUrl("/vendors/nprogress/nprogress.js") %>'></script>
+   <%-- <!-- NProgress -->
+    <script src='<%= ResolveUrl("/vendors/nprogress/nprogress.js") %>'></script>--%>
 
     <!-- bootstrap-daterangepicker -->
     <script src='<%= ResolveUrl("/vendors/moment/min/moment.min.js") %>'></script>
