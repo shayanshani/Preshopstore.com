@@ -604,8 +604,8 @@
                                         <th runat="server" id="thBarCode"><i class="fa fa-barcode"></i>BarCode</th>
                                         <th>Brand</th>
                                         <th>Product</th>
-                                        <th runat="server" id="thColor" visible="false">Color</th>
                                         <th runat="server" id="thSzes" visible="false">Size</th>
+                                        <th runat="server" id="thColor" visible="false">Color</th>
                                         <th>Qty</th>
                                         <th>Price(Per Item)</th>
                                         <th>Sale Price(Per Item)</th>
