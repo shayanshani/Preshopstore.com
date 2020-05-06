@@ -241,7 +241,9 @@
                 saleDataHtml += "<tr id='tr" + RowId + "'>";
                 var barcode ="<%= Convert.ToBoolean(config.IsBarCode) %>";
                 var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
-                var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
+                var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
+                console.log(IsColor);
+                console.log(HaveSizes);
                 if (barcode == "True")
                     saleDataHtml += "<td align='center'><input type='text' disabled='disabled' class='form-control subtotalInputBarCode' id='txtBarCode" + RowId + "'  /></td>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
