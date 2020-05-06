@@ -242,8 +242,6 @@
                 var barcode ="<%= Convert.ToBoolean(config.IsBarCode) %>";
                 var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
                 var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
-                console.log(IsColor);
-                console.log(HaveSizes);
                 if (barcode == "True")
                     saleDataHtml += "<td align='center'><input type='text' disabled='disabled' class='form-control subtotalInputBarCode' id='txtBarCode" + RowId + "'  /></td>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
@@ -251,7 +249,7 @@
                 if (HaveSizes == "True")
                     saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 if (IsColor == "2")
-                    saleDataHtml += "<td align='center'><select id='ddlColors" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                    saleDataHtml += "<td align='center'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtQty" + RowId + "' autocomplete='off' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' /></td>";
@@ -374,7 +372,6 @@
                 url: "StockEntry.aspx/GetColors",
                 dataType: "json",
                 success: function (res) {
-                    console.log(res.d);
                     Color = res.d;
                 }
             });
@@ -422,6 +419,7 @@
         }
 
         function FillColors(Index, SelectedValue) {
+            var PaletteColors = [];
             if (Color.length == 0)
                 GetColors();
             var ColorDropdownId = "#ddlColors" + Index;
@@ -429,8 +427,31 @@
             $(ColorDropdownId).append($("<option></option>").val("-1").html("Select Color"));
             $.each(Color, function (data, value) {
                 $(ColorDropdownId).append($("<option style='background-color:" + value.ColorCode + "'></option>").val(value.ColorID).html(value.ColorName));
+                PaletteColors.push(value.ColorCode);
             })
             $(ColorDropdownId).val(SelectedValue);
+            initColorPicker(Index, PaletteColors);
+        }
+
+        function initColorPicker(Index, PaletteColors) {
+            var ColorDropdownId = "#ddlColors" + Index;
+            $("#picker" + Index).colorPick({
+                'initialColor': '#3498db',
+                'allowRecent': false,
+                'allowCustomColor': false,
+                'paletteLabel': 'Choose color',
+                'palette': PaletteColors,
+                'onColorSelected': function () {
+                    this.element.css({ 'backgroundColor': this.color, 'color': this.color });
+                    var SelectedValue = -1;
+                    for (var i = 0; i < Color.length; i++) {
+                        if (Color[i].ColorCode == this.color) {
+                            SelectedValue = Color[i].ColorID;
+                        }
+                    }
+                    $(ColorDropdownId).val(SelectedValue);
+                }
+            });
         }
 
         function GetProductSizes(ProductId, Index, SelectedValue) {
@@ -509,6 +530,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -665,6 +687,8 @@
         function openModal(id) {
             $(id).modal('show');
         }
+
+
 
         function CalculateBill() {
             var TotalBill = 0;

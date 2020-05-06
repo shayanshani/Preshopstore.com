@@ -15,9 +15,10 @@
     <!-- Font Awesome -->
     <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/CheckBoxes.css" rel="stylesheet" />
-   <%-- <!-- NProgress -->
+    <%-- <!-- NProgress -->
     <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
-  --%>  <!-- iCheck -->
+    --%>
+    <!-- iCheck -->
     <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
     <!-- bootstrap-progressbar -->
@@ -109,10 +110,30 @@
             border-color: #cccccc;
         }
     </style>
-      <!-- jQuery -->
-        <script src="/vendors/jquery/dist/jquery.min.js"></script>
-        <!-- Bootstrap -->
-        <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link href="colorpicker/colorPick.css" rel="stylesheet" />
+    <style>
+        .newcolorpicker {
+            border-radius: 5px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            -webkit-transition: all linear .2s;
+            -moz-transition: all linear .2s;
+            -ms-transition: all linear .2s;
+            -o-transition: all linear .2s;
+            transition: all linear .2s;
+            border: thin solid #eee;
+        }
+
+            .newcolorpicker:hover {
+                transform: scale(1.1);
+            }
+    </style>
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="colorpicker/colorPick.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -259,7 +280,7 @@
 
 
         </script>
-      
+
         <script src="/JqueryAjax/Ajax.js"></script>
         <link href="/Select2/bootstrap-multiselect.css" rel="stylesheet" />
         <script src="/Select2/bootstrap-multiselect.js"></script>
@@ -448,7 +469,7 @@
 
     <!-- FastClick -->
     <script src='<%= ResolveUrl("/vendors/fastclick/lib/fastclick.js") %>'></script>
-   <%-- <!-- NProgress -->
+    <%-- <!-- NProgress -->
     <script src='<%= ResolveUrl("/vendors/nprogress/nprogress.js") %>'></script>--%>
 
     <!-- bootstrap-daterangepicker -->
