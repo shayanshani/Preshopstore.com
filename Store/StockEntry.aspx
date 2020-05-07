@@ -40,10 +40,11 @@
 
     <%--StockIn With Ajax--%>
     <script type="text/javascript">
-        var Brands = [], Products = [], Color = [], Sizes = [];
+        var Brands = [], Products = [], ProductsConfig = [], Color = [], Sizes = [];
         $(document).ready(function () {
             GetBrands();
             GetProducts();
+            GetProductsConfig();
             GetColors();
             GetSizes();
             $("#btnAddNewRow").removeAttr("disabled");
@@ -249,7 +250,7 @@
                 if (HaveSizes == "True")
                     saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 if (IsColor == "2")
-                    saleDataHtml += "<td align='center'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                    saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtQty" + RowId + "' autocomplete='off' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' /></td>";
@@ -365,6 +366,18 @@
             });
         }
 
+        function GetProductsConfig() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "StockEntry.aspx/GetProductConfig",
+                dataType: "json",
+                success: function (res) {
+                    ProductsConfig = res.d;
+                }
+            });
+        }
+
         function GetColors() {
             $.ajax({
                 type: "POST",
@@ -455,9 +468,9 @@
         }
 
         function GetProductSizes(ProductId, Index, SelectedValue) {
+            $("#ddlProducts" + Index).removeClass("error");
             var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
             if (HaveSizes == "True") {
-                $("#ddlProducts" + Index).removeClass("error");
                 var SizesDropDown = "#ddlSizes" + Index;
                 $(SizesDropDown).empty();
                 $(SizesDropDown).append($("<option></option>").val("-1").html("Select Size"));
@@ -468,6 +481,30 @@
                     $(SizesDropDown).append($("<option></option>").val(value.SizeID).html(value.Size));
                 })
                 $(SizesDropDown).val(SelectedValue);
+            }
+            GetProductConfig(ProductId, Index);
+        }
+
+        function GetProductConfig(ProductId, Index) {
+            var IsColor = "<%= Convert.ToInt16(config.IsColor) %>";
+            if (IsColor == "2") {
+                var Config = ProductsConfig.filter(function (e) {
+                    return e.ProductID == ProductId;
+                });
+                if (Config.length > 0) {
+                    if (Config[0].IsColor == 1) {
+                        $("#<%= thColor.ClientID%>").show();
+                        $("#tdColor" + Index).show();
+                    }
+                    else {
+                        $("#<%= thColor.ClientID%>").hide();
+                        $("#tdColor" + Index).hide();
+                    }
+                }
+                else {
+                    $("#<%= thColor.ClientID%>").hide();
+                    $("#tdColor" + Index).hide();
+                }
             }
         }
 
@@ -629,7 +666,7 @@
                                         <th>Brand</th>
                                         <th>Product</th>
                                         <th runat="server" id="thSzes" visible="false">Size</th>
-                                        <th runat="server" id="thColor" visible="false">Color</th>
+                                        <th runat="server" id="thColor" style="display: none">Color</th>
                                         <th>Qty</th>
                                         <th>Price(Per Item)</th>
                                         <th>Sale Price(Per Item)</th>
