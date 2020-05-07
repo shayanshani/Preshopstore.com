@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="CustomerBills.aspx.cs" Inherits="PreShop.SalesManagement.Store.CustomerBills" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="CustomerBills.aspx.cs" Inherits="PreShop.StockManagement.Store.CustomerBills" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -215,3 +214,4 @@
     </div>
 
 </asp:Content>
+

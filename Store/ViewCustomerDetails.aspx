@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewCustomerDetails.aspx.cs" Inherits="PreShop.SalesManagement.Store.ViewCustomerDetails" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewCustomerDetails.aspx.cs" Inherits="PreShop.StockManagement.Store.ViewCustomerDetails" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -502,3 +501,4 @@
     <script src='<%= ResolveUrl("../CustomFiles/bootstrap-notify.min.js") %>'></script>
     <link href='<%= ResolveUrl("../CustomFiles/CustomNotify.css") %>' rel="stylesheet" />
 </asp:Content>
+

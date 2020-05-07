@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewCustomers.aspx.cs" Inherits="PreShop.SalesManagement.Store.ViewCustomers" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewCustomers.aspx.cs" Inherits="PreShop.StockManagement.Store.ViewCustomers" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -178,4 +177,5 @@
     <script src='<%= ResolveUrl("../CustomFiles/bootstrap-notify.min.js") %>'></script>
     <link href='<%= ResolveUrl("../CustomFiles/CustomNotify.css") %>' rel="stylesheet" />
 </asp:Content>
+
 

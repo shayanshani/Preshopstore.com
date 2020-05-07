@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ManualSalesEntry.aspx.cs" Inherits="PreShop.SalesManagement.Store.ManualSalesEntry" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ManualSalesEntry.aspx.cs" Inherits="PreShop.StockManagement.Store.ManualSalesEntry" %>
 
 <%@ Register Assembly="SpartansControls" Namespace="SpartansControls" TagPrefix="sp" %>
 
@@ -31,7 +31,27 @@
         }
     </style>
     <script>
-        var Brands = [];
+        var Brands = [], Products = [], Color = [], Sizes = [], Prices = [];
+
+        $(document).ready(function () {
+            GetBrands();
+            GetProducts();
+            GetColors();
+            GetSizes();
+            GetPrices();
+            $("#btnSubmit").on('click', function () {
+                if (isValid())
+                    SaveSales();
+            });
+            var BillNo = $("#<%= HfBillNo.ClientID%>").val();
+            if (BillNo != null & BillNo != '' & BillNo != 'undefined') {
+                BindSalesItems(BillNo)
+            }
+            $('#<%= txtBillNo.ClientID%>').on('change', function () {
+                BindSalesItems($(this).val())
+            });
+        });
+
         function init() {
             timeDisplay = document.createTextNode("");
             document.getElementById("clock").appendChild(timeDisplay);
@@ -165,20 +185,7 @@
             return true;
         }
 
-        $(document).ready(function () {
-            $("#btnSubmit").on('click', function () {
-                if (isValid())
-                    SaveSales();
-            });
-            var BillNo = $("#<%= HfBillNo.ClientID%>").val();
-            if (BillNo != null & BillNo != '' & BillNo != 'undefined') {
-                BindSalesItems(BillNo)
-            }
-            $('#<%= txtBillNo.ClientID%>').on('change', function () {
-                BindSalesItems($(this).val())
-            });
-            GetBrands();
-        });
+
 
         function Loader() {
             $("#SaleData > tbody").empty();
@@ -210,7 +217,7 @@
                 for (var i = 0; i < data.d.length; i++) {
                     SaleData.append("<tr id='tr" + i + "'>" +
                         "<td><input type='hidden' value='" + data.d[i].SaleId + "' id='hfSaleId" + i + "' /><select class='form-control Searchable' id='ddlCompany" + i + "' onchange='FillProducts(this.value," + i + ",-1)'></select></td>" +
-                        "<td><select class='form-control Searchable' id='ddlProducts" + i + "' onchange='GetPrices(this.value," + i + ")'></select></td>" +
+                        "<td><select class='form-control Searchable' id='ddlProducts" + i + "' onchange='GetProductSizes(this.value," + i + ",-1);FillPrices(this.value," + i + ");'></select></td>" +
                         "<td><input class='form-control' type='text' value='" + data.d[i].Quantity + "' id='txtQty" + i + "' style='width:50px' onkeydown='CalculateItemTotal(" + i + ");' onkeyup='CalculateItemTotal(" + i + ");' /></td>" +
                         "<td><input class='subtotalInput' type='text' value='" + data.d[i].Price + "' id='txtPrice" + i + "' style='width:100px' /></td>" +
                         "<td><input class='form-control' type='text' value='" + data.d[i].SalePrice + "' id='txtSalePrice" + i + "' onkeydown='CalculateItemTotal(" + i + ");' onkeyup='CalculateItemTotal(" + i + ");' style='width:100px' /></td>" +
@@ -236,10 +243,29 @@
             var SaleData = $("#SaleData > tbody");
             if (ValidateRow($("#SaleData > tbody >tr:last").index())) {
                 var RowId = $("#SaleData > tbody >tr:last").index() + 1;
+                var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+                var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
+
                 var saleDataHtml = '';
                 saleDataHtml += "<tr id='tr" + RowId + "'>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
-                saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetPrices(this.value," + RowId + ")'></select></td>";
+                if (HaveSizes == "True") {
+                    saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
+                    if (IsColor == "2") {
+                        saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);RemoveError(" + RowId + ");'></select></td>";
+                    }
+                    else {
+                        saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                    }
+                }
+                else if (IsColor == "2") {
+                    saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
+                }
+                else {
+                    saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
+                }
+                if (IsColor == "2")
+                    saleDataHtml += "<td align='center'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' value='1' autocomplete='off' id='txtQty" + RowId + "' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' class='subtotalInput' style='width:100px' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' class='form-control' style='width:100px' autocomplete='off' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
@@ -267,8 +293,8 @@
                     "<td>" + ProductName + "</td>" +
                     "<td>" + $("#txtQty" + i).val() + "</td>" +
                     "<td>" + $("#txtSalePrice" + i).val() + "</td>" +
-                    "<td>" + $("#txtAmount" + i).val() + "</td>" 
-                    "</tr>";
+                    "<td>" + $("#txtAmount" + i).val() + "</td>"
+                "</tr>";
             }
             $("#tblInvoice > tbody").append(InvoiceHtml);
             var Discount = $("#<%= txtDiscount.ClientID %>").val();
@@ -282,6 +308,8 @@
             $tableSales = $('#SaleData > tbody  > tr');
             var Sales = [];
             var TotalSales = $tableSales.length;
+            var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
             for (var i = 0; i < TotalSales; i++) {
                 Sales.push({
                     SaleId: $("#hfSaleId" + i).length > 0 ? $("#hfSaleId" + i).val() : null,
@@ -294,6 +322,8 @@
                     Expense: "0",
                     Date: $("#<%= txtDate.ClientID%>").val(),
                     InvoiceNo: $("#<%= txtBillNo.ClientID%>").val(),
+                    SizeId: (HaveSizes == "True") ? $("#ddlSizes" + i).val() : "0",
+                    ColorId: (IsColor == "2") ? $("#ddlColors" + i).val() : "0",
                     SerialNo: '',
                     hdnQuantity: "0"
                 });
@@ -346,7 +376,7 @@
             $("#<%=txtTotalBill.ClientID%>").val(TotalBill);
             $("#<%=txtDiscount.ClientID%>").val(TotalDiscount);
             $("#<%= txtPaidAmount.ClientID%>").val(TotalBill - TotalDiscount);
-            CalBill(); 
+            CalBill();
         }
 
         function CalBill() {
@@ -388,40 +418,112 @@
         }
 
         function FillProducts(CompanyId, Index, SelectedValue) {
+            if (Products.length == 0)
+                GetProducts();
+            $("#ddlCompany" + Index).removeClass("error");
             var ProductsDropDown = "#ddlProducts" + Index;
             $(ProductsDropDown).empty();
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "ManualSalesEntry.aspx/GetProducts",
-                data: '{CompanyID: ' + CompanyId + '}',
-                beforeSend: function () {
-                    $(ProductsDropDown).prepend($('<option></option>').html('Loading products...'));
-                },
-                dataType: "json",
-                success: function (res) {
-                    $(ProductsDropDown).empty();
-                    $(ProductsDropDown).append($("<option></option>").val("-1").html("Select Product"));
-                    $.each(res.d, function (data, value) {
-                        $(ProductsDropDown).append($("<option></option>").val(value.ProductID).html(value.ProductName));
-                    })
-                    $(ProductsDropDown).val(SelectedValue);
+            $(ProductsDropDown).append($("<option></option>").val("-1").html("Select Product"));
+            var FilteredProducts = Products.filter(function (e) {
+                return e.CompanyID == CompanyId;
+            });
+            $.each(FilteredProducts, function (data, value) {
+                $(ProductsDropDown).append($("<option></option>").val(value.ProductID).html(value.Product));
+            })
+            $(ProductsDropDown).val(SelectedValue);
+        }
+
+        function FillPrices(ProductId, Index) {
+            if (Prices.length == 0)
+                GetPrices();
+            var txtSalePrice = "#txtSalePrice" + Index, txtPrice = "#txtPrice" + Index;
+            var FilteredPrice = Prices.filter(function (e) {
+                return e.ProductId == ProductId;
+            });
+
+            $(txtPrice).val(FilteredPrice[0].Price);
+            $(txtSalePrice).val(FilteredPrice[0].SalePrice);
+            CalculateItemTotal(Index);
+        }
+
+        function FillColors(Id, Index, SelectedValue) {
+            var IsColor = "<%= Convert.ToInt32(config.IsColor) %>";
+            var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
+            if (IsColor == "2") {
+                var PaletteColors = [];
+                if (Color.length == 0)
+                    GetColors();
+                var ColorDropdownId = "#ddlColors" + Index;
+                $(ColorDropdownId).empty();
+                $(ColorDropdownId).append($("<option></option>").val("-1").html("Select Color"));
+                var FilteredColors = Color.filter(function (e) {
+                    if (HaveSizes == "True") {
+                        return e.SizeId == Id;
+                    }
+                    else {
+                        return e.ProductID == Id;
+                    }
+                });
+                console.log(FilteredColors);
+                $.each(FilteredColors, function (data, value) {
+                    $(ColorDropdownId).append($("<option style='background-color:" + value.ColorCode + "'></option>").val(value.ColorID).html(value.ColorName));
+                    PaletteColors.push(value.ColorCode);
+                })
+                $(ColorDropdownId).val(SelectedValue);
+                initColorPicker(Index, PaletteColors);
+            }
+        }
+
+        function initColorPicker(Index, PaletteColors) {
+            var ColorDropdownId = "#ddlColors" + Index;
+            $("#picker" + Index).colorPick({
+                'initialColor': '#3498db',
+                'allowRecent': false,
+                'allowCustomColor': false,
+                'paletteLabel': 'Choose color',
+                'palette': PaletteColors,
+                'onColorSelected': function () {
+                    this.element.css({ 'backgroundColor': this.color, 'color': this.color });
+                    var SelectedValue = -1;
+                    for (var i = 0; i < Color.length; i++) {
+                        if (Color[i].ColorCode == this.color) {
+                            SelectedValue = Color[i].ColorID;
+                        }
+                    }
+                    $(ColorDropdownId).val(SelectedValue);
                 }
             });
         }
 
-        function GetPrices(PorductId, Index) {
-            var txtSalePrice = "#txtSalePrice" + Index, txtPrice = "#txtPrice" + Index;
+        function GetProductSizes(ProductId, Index, SelectedValue) {
+            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
+            if (HaveSizes == "True") {
+                if (Sizes.length == 0) {
+                    GetSizes();
+                }
+                $("#ddlProducts" + Index).removeClass("error");
+                var SizesDropDown = "#ddlSizes" + Index;
+                $(SizesDropDown).empty();
+                $(SizesDropDown).append($("<option></option>").val("-1").html("Select Size"));
+                var FilteredSizes = Sizes.filter(function (e) {
+                    return e.ProductID == ProductId;
+                });
+                $.each(FilteredSizes, function (data, value) {
+                    $(SizesDropDown).append($("<option></option>").val(value.SizeID).html(value.Size));
+                })
+                $(SizesDropDown).val(SelectedValue);
+            }
+        }
+
+        function GetPrices() {
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                data: '{ProductId: ' + PorductId + '}',
                 url: "ManualSalesEntry.aspx/GetSalePrice",
                 dataType: "json",
                 success: function (res) {
-                    $(txtPrice).val(res.d.Price);
-                    $(txtSalePrice).val(res.d.SalePrice);
-                    CalculateItemTotal(Index);
+                    Prices = res.d;
+
                 }
             });
         }
@@ -430,10 +532,45 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "ManualSalesEntry.aspx/FillBrands",
+                url: "StockEntry.aspx/FillBrands",
                 dataType: "json",
                 success: function (res) {
                     Brands = res.d;
+                }
+            });
+        }
+        function GetProducts() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ManualSalesEntry.aspx/GetProducts",
+                dataType: "json",
+                success: function (res) {
+                    Products = res.d;
+                }
+            });
+        }
+
+        function GetColors() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ManualSalesEntry.aspx/GetColors",
+                dataType: "json",
+                success: function (res) {
+                    Color = res.d;
+                }
+            });
+        }
+
+        function GetSizes() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "StockEntry.aspx/GetSizes",
+                dataType: "json",
+                success: function (res) {
+                    Sizes = res.d;
                 }
             });
         }
@@ -518,6 +655,8 @@
                                     <tr>
                                         <th>Brand</th>
                                         <th>Product</th>
+                                        <th runat="server" id="thSzes" visible="false">Size</th>
+                                        <th runat="server" id="thColor" visible="false">Color</th>
                                         <th>Qty</th>
                                         <th>Price(Per Item)</th>
                                         <th>Sale Price</th>
@@ -530,7 +669,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr id="trFooter">
-                                        <td colspan="8">
+                                        <td colspan="10">
                                             <button id="btnAddNewRow" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new sale</button>
                                         </td>
                                     </tr>
@@ -683,3 +822,4 @@
     <script src='<%= ResolveUrl("../CustomFiles/bootstrap-notify.min.js") %>'></script>
     <link href='<%= ResolveUrl("../CustomFiles/CustomNotify.css") %>' rel="stylesheet" />
 </asp:Content>
+

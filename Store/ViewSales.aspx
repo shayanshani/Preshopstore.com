@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewSales.aspx.cs" Inherits="PreShop.SalesManagement.Store.ViewSales" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="ViewSales.aspx.cs" Inherits="PreShop.StockManagement.Store.ViewSales" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
@@ -238,4 +237,3 @@
     <link href='<%= ResolveUrl("../CustomFiles/CustomNotify.css") %>' rel="stylesheet" />
 
 </asp:Content>
-

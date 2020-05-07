@@ -41,7 +41,7 @@
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
   padding: 15px;
   font-family: "Open Sans", sans-serif;
-  width: 550px;
+  width: auto;
 }
 
 #colorPick span {

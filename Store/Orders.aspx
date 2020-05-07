@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="PreShop.SalesManagement.Store.Orders" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="PreShop.StockManagement.Store.Orders" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -109,9 +109,12 @@
                                             <td align="center">
                                                 <ul style="list-style: none">
                                                     <li runat="server" visible='<%# Convert.ToString(Eval("[Status]")).Equals("Pending") %>'>
-                                                        <a href="#" class="btn btn-success btn-sm" style="width: 90px;" onclick='FillHiddenFields("<%# Eval("OrderUserId") %>","<%# Eval("Email") %>","<%# Eval("Contact") %>");'>
+                                                        <a href="#" class="btn btn-success btn-sm hidden" style="width: 90px;" onclick='FillHiddenFields("<%# Eval("OrderUserId") %>","<%# Eval("Email") %>","<%# Eval("Contact") %>");'>
                                                             <i class="fa fa-check"></i>Confirm
                                                         </a>
+                                                        <asp:LinkButton ID="btnConfirmOrder" runat="server" OnClientClick="FillHiddenFields("<%# Eval("OrderUserId") %>","<%# Eval("Email") %>","<%# Eval("Contact") %>");" OnClick="btnConfirmOrder_Click">
+                                                            <i class="fa fa-check"></i>Confirm
+                                                        </asp:LinkButton>
                                                     </li>
                                                     <li>
                                                         <asp:LinkButton ID="btnDenyOrder" Visible="false" CommandArgument='<%# Eval("OrderUserId")+","+Eval("Email")+","+Eval("Contact") %>' OnClick="btnDenyOrder_Click" OnClientClick="return confirm('Are you sure you want to deny this order?');" CssClass="btn btn-danger btn-sm" Style="width: 90px" runat="server">
@@ -218,7 +221,10 @@
                 hfOrderId.val(OrderId);
                 hfEmail.val(Email);
                 hfContact.val(Contact);
-                openModal("#assignEmployees");
+                return true;//openModal("#assignEmployees");
+            }
+            else {
+                return false;
             }
         }
 
@@ -253,3 +259,4 @@
     <link href='<%= ResolveUrl("../CustomFiles/CustomNotify.css") %>' rel="stylesheet" />
 
 </asp:Content>
+
