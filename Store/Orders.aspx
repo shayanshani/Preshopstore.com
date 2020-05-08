@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="PreShop.StockManagement.Store.Orders" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -20,9 +21,12 @@
                             <thead>
                                 <tr>
                                     <td colspan="10">
-                                        <a href="#" class="btn btn-success" onclick='validateCheckBoxes();'>
+                                        <a href="#" class="btn btn-success hidden" onclick='validateCheckBoxes();'>
                                             <i class="fa fa-check-circle-o"></i>&nbsp&nbsp Confirm all
                                         </a>
+                                        <asp:LinkButton Id="btnConfirmAllOrders" CssClass="btn btn-success" OnClientClick='return validateCheckBoxes();' OnClick="btnConfirmAllOrders_Click" runat="server">
+                                            <i class="fa fa-check-circle-o"></i>&nbsp&nbsp Confirm all
+                                        </asp:LinkButton>
                                     </td>
                                 </tr>
                                 <tr>
@@ -46,7 +50,7 @@
                                         <asp:HiddenField ID="hfOrderId" runat="server" Value='<%# Eval("OrderUserId") %>' />
                                         <tr class="even gradeX">
                                             <td>
-                                                <input type="checkbox" id="chkConfirmOrder" Visible='<%# Convert.ToString(Eval("[Status]")).Equals("Pending") %>' runat="server" value='<%# Eval("OrderUserId")+","+Eval("Email")+","+Eval("Contact") %>' />
+                                                <input type="checkbox" id="chkConfirmOrder" visible='<%# Convert.ToString(Eval("[Status]")).Equals("Pending") %>' runat="server" value='<%# Eval("OrderUserId")+","+Eval("Email")+","+Eval("Contact") %>' />
                                             </td>
                                             <td><%# Convert.ToDateTime(Eval("[OrderDate]")).ToShortDateString() %></td>
                                             <td><%# Eval("InvoiceNo") %></td>
@@ -112,7 +116,7 @@
                                                         <a href="#" class="btn btn-success btn-sm hidden" style="width: 90px;" onclick='FillHiddenFields("<%# Eval("OrderUserId") %>","<%# Eval("Email") %>","<%# Eval("Contact") %>");'>
                                                             <i class="fa fa-check"></i>Confirm
                                                         </a>
-                                                        <asp:LinkButton ID="btnConfirmOrder" runat="server" OnClientClick="FillHiddenFields("<%# Eval("OrderUserId") %>","<%# Eval("Email") %>","<%# Eval("Contact") %>");" OnClick="btnConfirmOrder_Click">
+                                                        <asp:LinkButton ID="btnConfirmOrder" CssClass="btn btn-success btn-sm" Style="width: 90px" runat="server" CommandArgument='<%# Eval("OrderUserId")+","+Eval("Email")+","+Eval("Contact") %>' OnClientClick="return confirm('Are you sure you want to Confirm this order?');" OnClick="btnConfirmOrder_Click">
                                                             <i class="fa fa-check"></i>Confirm
                                                         </asp:LinkButton>
                                                     </li>
@@ -247,11 +251,12 @@
                 if (confirm('Are you sure you want to confirm selected orders?')) {
                     var hfConfirmAllStatus = $('#<%= hfConfirmAllStatus.ClientID%>');
                     hfConfirmAllStatus.val("1");
-                    openModal("#assignEmployees");
+                    return true; //openModal("#assignEmployees");
                 }
             }
             if (isValid == false) {
                 alert("Please select at least one order..");
+                return false;
             }
         }
     </script>
