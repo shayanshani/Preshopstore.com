@@ -443,9 +443,14 @@
             var FilteredPrice = Prices.filter(function (e) {
                 return e.ProductId == ProductId;
             });
-
-            $(txtPrice).val(FilteredPrice[0].Price);
-            $(txtSalePrice).val(FilteredPrice[0].SalePrice);
+            if (FilteredPrice.length > 0) {
+                $(txtPrice).val(FilteredPrice[0].Price);
+                $(txtSalePrice).val(FilteredPrice[0].SalePrice);
+            }
+            else {
+                 $(txtPrice).val(0);
+                $(txtSalePrice).val(0);
+            }
             CalculateItemTotal(Index);
         }
 
@@ -519,7 +524,7 @@
             GetProductConfig(ProductId, Index);
         }
 
-        
+
         function GetProductConfig(ProductId, Index) {
             var IsColor = "<%= Convert.ToInt16(config.IsColor) %>";
             if (IsColor == "2") {
@@ -556,7 +561,7 @@
             });
         }
 
-         function GetProductsConfig() {
+        function GetProductsConfig() {
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
