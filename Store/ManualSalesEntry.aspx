@@ -101,7 +101,7 @@
             html += '<style type="text/css" media="print"> .printInvoice { width: 100%; zoom: 185%; }</style></head><body>';
             html += contents;
             html += '</body></html>';
-            frameDoc.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
+            frameDoc.body.innerHTML = html;
             frameDoc.document.close();
             setTimeout(function () {
                 window.frames["frame1"].focus();
