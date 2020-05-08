@@ -41,13 +41,15 @@
     <%--StockIn With Ajax--%>
     <script type="text/javascript">
         var Brands = [], Products = [], ProductsConfig = [], Color = [], Sizes = [];
+        $(window).load(function () {
+            $("#btnAddNewRow").removeAttr("disabled");
+        });
         $(document).ready(function () {
             GetBrands();
             GetProducts();
             GetProductsConfig();
             GetColors();
             GetSizes();
-            $("#btnAddNewRow").removeAttr("disabled");
             $("#btnSubmit").on('click', function () {
                 if (isValid()) {
                     SaveStock();
