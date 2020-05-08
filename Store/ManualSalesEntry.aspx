@@ -31,11 +31,12 @@
         }
     </style>
     <script>
-        var Brands = [], Products = [], Color = [], Sizes = [], Prices = [];
+        var Brands = [], Products = [], ProductsConfig = [], Color = [], Sizes = [], Prices = [];
 
         $(document).ready(function () {
             GetBrands();
             GetProducts();
+            GetProductsConfig();
             GetColors();
             GetSizes();
             GetPrices();
@@ -252,7 +253,7 @@
                 if (HaveSizes == "True") {
                     saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
                     if (IsColor == "2") {
-                        saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);RemoveError(" + RowId + ");'></select></td>";
+                        saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);RemoveError(" + RowId + ");'></select></td>";
                     }
                     else {
                         saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
@@ -513,6 +514,31 @@
                 })
                 $(SizesDropDown).val(SelectedValue);
             }
+            GetProductConfig(ProductId, Index);
+        }
+
+        
+        function GetProductConfig(ProductId, Index) {
+            var IsColor = "<%= Convert.ToInt16(config.IsColor) %>";
+            if (IsColor == "2") {
+                var Config = ProductsConfig.filter(function (e) {
+                    return e.ProductID == ProductId;
+                });
+                if (Config.length > 0) {
+                    if (Config[0].IsColor == 1) {
+                        $("#<%= thColor.ClientID%>").show();
+                        $("#tdColor" + Index).show();
+                    }
+                    else {
+                        $("#<%= thColor.ClientID%>").hide();
+                        $("#tdColor" + Index).hide();
+                    }
+                }
+                else {
+                    $("#<%= thColor.ClientID%>").hide();
+                    $("#tdColor" + Index).hide();
+                }
+            }
         }
 
         function GetPrices() {
@@ -524,6 +550,18 @@
                 success: function (res) {
                     Prices = res.d;
 
+                }
+            });
+        }
+
+         function GetProductsConfig() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "StockEntry.aspx/GetProductConfig",
+                dataType: "json",
+                success: function (res) {
+                    ProductsConfig = res.d;
                 }
             });
         }
@@ -656,7 +694,7 @@
                                         <th>Brand</th>
                                         <th>Product</th>
                                         <th runat="server" id="thSzes" visible="false">Size</th>
-                                        <th runat="server" id="thColor" visible="false">Color</th>
+                                        <th runat="server" id="thColor" style="display: none">Color</th>
                                         <th>Qty</th>
                                         <th>Price(Per Item)</th>
                                         <th>Sale Price</th>
