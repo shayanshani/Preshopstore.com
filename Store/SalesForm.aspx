@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" EnableEventValidation="false" AutoEventWireup="true" CodeBehind="SalesForm.aspx.cs" Inherits="PreShop.SalesManagement.Store.SalesForm" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Store/Master.Master" AutoEventWireup="true" CodeBehind="SalesForm.aspx.cs" Inherits="PreShop.StockManagement.Store.SalesForm" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
