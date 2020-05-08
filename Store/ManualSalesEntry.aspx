@@ -95,12 +95,13 @@
             document.body.appendChild(frame1);
             var frameDoc = frame1.contentWindow ? frame1.contentWindow : frame1.contentDocument.document ? frame1.contentDocument.document : frame1.contentDocument;
             frameDoc.document.open();
-            frameDoc.body.appendChild('<html><head><title></title>');
-            frameDoc.body.appendChild('<link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="print">');
-            frameDoc.body.appendChild('<link href="/build/css/custom.min.css" rel="stylesheet" media="print">');
-            frameDoc.body.appendChild('<style type="text/css" media="print"> .printInvoice { width: 100%; zoom: 185%; }</style></head><body>');
-            frameDoc.body.appendChild(contents);
-            frameDoc.body.appendChild('</body></html>');
+            var html = '<html><head><title></title>';
+            html += '<link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="print">';
+            html += '<link href="/build/css/custom.min.css" rel="stylesheet" media="print">';
+            html += '<style type="text/css" media="print"> .printInvoice { width: 100%; zoom: 185%; }</style></head><body>';
+            html += contents;
+            html += '</body></html>';
+            frameDoc.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
             frameDoc.document.close();
             setTimeout(function () {
                 window.frames["frame1"].focus();
@@ -448,7 +449,7 @@
                 $(txtSalePrice).val(FilteredPrice[0].SalePrice);
             }
             else {
-                 $(txtPrice).val(0);
+                $(txtPrice).val(0);
                 $(txtSalePrice).val(0);
             }
             CalculateItemTotal(Index);
