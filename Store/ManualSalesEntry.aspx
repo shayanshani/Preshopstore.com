@@ -255,7 +255,7 @@
                 if (HaveSizes == "True") {
                     saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
                     if (IsColor == "2") {
-                        saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);RemoveError(" + RowId + ");'></select></td>";
+                        saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='FillColors(this.value," + RowId + ",-1);RemoveError(" + RowId + ");'></select></td>";
                     }
                     else {
                         saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
@@ -268,7 +268,7 @@
                     saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);FillPrices(this.value," + RowId + ");'></select></td>";
                 }
                 if (IsColor == "2")
-                    saleDataHtml += "<td align='center'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
+                    saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden Searchable' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' value='1' autocomplete='off' id='txtQty" + RowId + "' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' class='subtotalInput' style='width:100px' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' class='form-control' style='width:100px' autocomplete='off' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
