@@ -537,8 +537,9 @@
                         $("#tdColor" + Index).show();
                     }
                     else {
-                        $("#<%= thColor.ClientID%>").hide();
-                        $("#tdColor" + Index).hide();
+                        $("#<%= thColor.ClientID%>").show();
+                        $("#tdColor" + Index).show();
+                        $("#tdColor" + Index).html(null);
                     }
                 }
                 else {
