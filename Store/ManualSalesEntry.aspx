@@ -32,7 +32,9 @@
     </style>
     <script>
         var Brands = [], Products = [], ProductsConfig = [], Color = [], Sizes = [], Prices = [];
-
+        $(window).load(function () {
+            $("#btnAddNewRow").removeAttr("disabled");
+        });
         $(document).ready(function () {
             GetBrands();
             GetProducts();
@@ -708,7 +710,7 @@
                                 <tfoot>
                                     <tr id="trFooter">
                                         <td colspan="10">
-                                            <button id="btnAddNewRow" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new sale</button>
+                                            <button id="btnAddNewRow" disabled="disabled" type="button" onclick="AddNewRow();" class="btn btn-success" style="margin-bottom: 10px">Add new sale</button>
                                         </td>
                                     </tr>
                                 </tfoot>
