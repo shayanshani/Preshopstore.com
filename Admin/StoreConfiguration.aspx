@@ -46,7 +46,7 @@
             });
             $("#<%= chkResendEmail.ClientID%>").click(function () {
                 $("#<%= divEmailId.ClientID%>").ToggleSectionDisplay();
-             });
+            });
         });
     </script>
     <style>
@@ -183,23 +183,34 @@
                                 <hr />
                             </div>
                             <div class="row" id="divCategories" runat="server">
-                                <h5>Assign Categories
-                                </h5>
-                                <hr />
-                                <div id="CheckboxesRepeaterCat">
-                                    <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound">
-                                        <ItemTemplate>
-                                            <label class="col-sm-2 control-label"><%# Eval("Category") %></label>
-                                            <div class="col-sm-1">
-                                                <label class="switch switch-info m-b">
-                                                    <input type="checkbox" class="js-switch" runat="server" id="chkCategory" value='<%# Eval("HeadingId") %>'>
-                                                    <span>
-                                                        <i class="handle"></i>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
+                                <div class="col-lg-12" id="CheckboxesRepeaterCat">
+                                    <h5>Assign Categories
+                                    </h5>
+                                    <hr />
+                                    <table class="table table-bordered table-responsive">
+                                        <tr>
+                                            <th></th>
+                                            <th>Category
+                                            </th>
+                                        </tr>
+                                        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound">
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <label class="switch switch-info m-b">
+                                                            <input type="checkbox" class="js-switch" runat="server" id="chkCategory" value='<%# Eval("HeadingId") %>' />
+                                                            <span>
+                                                                <i class="handle"></i>
+                                                            </span>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Category") %>
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </table>
                                 </div>
                             </div>
                             <div class="row">
