@@ -178,7 +178,7 @@
                                         <ul class="nav child_menu">
                                             <li><a href="StoreList.aspx">Registered Stores/Requests</a></li>
                                             <li><a href="StoresCredentials.aspx">Single Sign On</a></li>
-                                            <li><a href="AssignCategories.aspx">Assign Categories</a></li>
+                                            <li style="display:none"><a href="AssignCategories.aspx">Assign Categories</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-database"></i>Manage Website<span class="fa fa-chevron-down"></span></a>
