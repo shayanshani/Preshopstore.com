@@ -248,17 +248,17 @@
                                                             <asp:FileUpload ID="flvProductUpload" Visible="false" runat="server" AllowMultiple="true" ClientIDMode="Static" />
 
                                                             <div class="demo-container size-narrow" runat="server" id="DemoContainer1">
-                                                                <telerik:RadAsyncUpload ClientIDMode="Static" MultipleFileSelection="Automatic" OnFileUploaded="AsyncUpload1_FileUploaded"
-                                                                    ToolTip="Upload Images of your product" RenderMode="Lightweight"
-                                                                    runat="server" ID="AsyncUpload1" ChunkSize="1048576" MaxFileInputsCount="8" HideFileInput="true">
+                                                                <telerik:radasyncupload clientidmode="Static" multiplefileselection="Automatic" onfileuploaded="AsyncUpload1_FileUploaded"
+                                                                    tooltip="Upload Images of your product" rendermode="Lightweight"
+                                                                    runat="server" id="AsyncUpload1" chunksize="1048576" maxfileinputscount="8" hidefileinput="true">
                                                                     <Localization Select="Upload Images" />
-                                                                </telerik:RadAsyncUpload>
+                                                                </telerik:radasyncupload>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <telerik:RadProgressArea RenderMode="Lightweight" runat="server" ID="RadProgressArea1" />
-                                                        <telerik:RadAjaxManager runat="server" ID="RadAjaxManager1" DefaultLoadingPanelID="RadAjaxLoadingPanel1">
+                                                        <telerik:radprogressarea rendermode="Lightweight" runat="server" id="RadProgressArea1" />
+                                                        <telerik:radajaxmanager runat="server" id="RadAjaxManager1" defaultloadingpanelid="RadAjaxLoadingPanel1">
                                                             <AjaxSettings>
                                                                 <telerik:AjaxSetting AjaxControlID="ConfiguratorPanel1">
                                                                     <UpdatedControls>
@@ -267,8 +267,8 @@
                                                                     </UpdatedControls>
                                                                 </telerik:AjaxSetting>
                                                             </AjaxSettings>
-                                                        </telerik:RadAjaxManager>
-                                                        <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" />
+                                                        </telerik:radajaxmanager>
+                                                        <telerik:radajaxloadingpanel runat="server" id="RadAjaxLoadingPanel1" />
                                                     </div>
                                                     <div id="DivProductImage" runat="server" clientidmode="Static" style="display: none" class="col-sm-4">
                                                         <img id="ProductImage" runat="server" clientidmode="Static" src="#" style="height: 115px;" />
@@ -291,6 +291,19 @@
                                                                 <asp:DropDownList ID="ddlUnits" runat="server" CssClass="form-control">
                                                                 </asp:DropDownList>
                                                             </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label>
+                                                                Product Condition:&nbsp;
+                                                            </label>
+                                                            <asp:DropDownList ID="ddlProductCondition" runat="server" CssClass="form-control">
+                                                                <asp:ListItem Text="New" Value="New"></asp:ListItem>
+                                                                <asp:ListItem Text="Used" Value="Used"></asp:ListItem>
+                                                            </asp:DropDownList>
                                                         </div>
                                                     </div>
                                                 </div>
