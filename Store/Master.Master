@@ -320,7 +320,7 @@
                                     </li>
                                     <li>
                                         <a id="LnkSalesForm" runat="server">
-                                            <i class="fa fa-shopping-cart"></i>Sales & Billing Form
+                                            <i class="fa fa-shopping-cart"></i>Sales & Billing
                                         </a>
                                     </li>
                                     <li><a><i class="fa fa-bars"></i>Sales Detail<span class="fa fa-chevron-down"></span></a>
@@ -333,6 +333,8 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <li><a href="ManageProductStock.aspx"><i class="fa fa-plus"></i>Stock</a>
+                                    </li>
                                     <li><a><i class="fa fa-database"></i>Manage Products<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="AddCompany.aspx">Add/Edit Brands</a></li>
@@ -341,9 +343,8 @@
                                             <li id="LiFlavours" runat="server" visible="false"><a href="AddFlavors.aspx">Add/Edit Flavour</a></li>
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-plus"></i>Manage Stock<span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-eye"></i>View Stock<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="StockEntry.aspx">Add/Edit Stock</a></li>
                                             <li><a href="ViewCurrentStock.aspx">Current Stock</a></li>
                                             <li><a href="ViewStock.aspx">Stock Details</a></li>
                                             <li id="liSupplierBills" runat="server"><a href="ViewBills.aspx">Supplier Bills</a></li>
