@@ -483,6 +483,8 @@
         }
 
         function FillColors(Index, SelectedValue) {
+            console.clear();
+            console.log("Filling colors");
             var PaletteColors = [];
             if (Color.length == 0)
                 GetColors();
