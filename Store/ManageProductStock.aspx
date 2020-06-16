@@ -278,8 +278,7 @@
                 tblStockItems.append(saleDataHtml);
                 FillBrands(RowId, -1);
                 //EmbedSelect2DropDown();
-                if (IsColor == "2")
-                    FillColors(RowId, -1);
+                FillColors(RowId, -1);
                 $("#btnSubmit").attr('disabled', false);
                 CalculateBill();
                 CalBill();
