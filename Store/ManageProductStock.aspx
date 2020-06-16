@@ -399,6 +399,7 @@
                     var CompanyId = $('#<%= hfCompanyID.ClientID%>').val();
                     GetProductsConfig(SelectedValue);
                     FillProducts(CompanyId, Index, SelectedValue);
+                    FillColors(Index, -1);
                 }
             });
         }
@@ -528,7 +529,7 @@
                 if (ProductId > 0) {
                     $(SizesDropDown).append($("<option></option>").val("-2").html("Add New Size"));
                 }
-                
+
                 var FilteredSizes = Sizes.filter(function (e) {
                     return e.ProductID == ProductId;
                 });
@@ -691,27 +692,27 @@
         }
         function SaveSize() {
             var SizeName = $("#<%= txtSizeName.ClientID%>").val();
-             var ProductId = $("#<%= hfProductID.ClientID%>").val();
-             $.ajax({
-                 type: "POST",
-                 contentType: "application/json; charset=utf-8",
-                 url: "ManageProductStock.aspx/SaveSize",
-                 data: "{'Size':'" + SizeName + "','ProductID':'" + ProductId + "'}",
-                 dataType: "json",
-                 success: function (data) {
-                     var r = data.d;
-                     $('#<%= hfSize.ClientID%>').val(r);
-                    GetSizes(r == -3 ? -1 : r);
-                    hideModal('#AddEditSize');
-                    if (r == -3) {
-                        $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
-                    }
-                    else {
-                        $.notify({ title: 'Success Status: ', message: 'Size has been added!', icon: 'fa fa-check' }, { type: 'success' });
-                    }
+            var ProductId = $("#<%= hfProductID.ClientID%>").val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ManageProductStock.aspx/SaveSize",
+                data: "{'Size':'" + SizeName + "','ProductID':'" + ProductId + "'}",
+                dataType: "json",
+                success: function (data) {
+                    var r = data.d;
+                    $('#<%= hfSize.ClientID%>').val(r);
+                     GetSizes(r == -3 ? -1 : r);
+                     hideModal('#AddEditSize');
+                     if (r == -3) {
+                         $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
+                     }
+                     else {
+                         $.notify({ title: 'Success Status: ', message: 'Size has been added!', icon: 'fa fa-check' }, { type: 'success' });
+                     }
 
-                },
-            });
+                 },
+             });
         }
 
         function ClearSizeItems() {
