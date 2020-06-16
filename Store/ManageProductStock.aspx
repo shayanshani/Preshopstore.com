@@ -60,10 +60,10 @@
             $('#AddEditSize').on('hide.bs.modal', function (e) {
                 ClearSizeItems();
             });
+            GetColors();
             GetBrands(-1);
             GetProducts(-1);
             GetProductsConfig(-1);
-            GetColors();
             GetSizes(-1);
             $("#btnSubmit").on('click', function () {
                 if (isValid()) {
