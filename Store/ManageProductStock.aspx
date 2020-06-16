@@ -396,9 +396,11 @@
                     Products = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var CompanyId = $('#<%= hfCompanyID.ClientID%>').val();
+                    GetColors();
+                    FillColors(Index, -1);
                     GetProductsConfig(SelectedValue);
                     FillProducts(CompanyId, Index, SelectedValue);
-                    FillColors(Index, -1);
+                    
                 }
             });
         }
@@ -439,6 +441,8 @@
                     Sizes = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var ProductId = $('#<%= hfProductID.ClientID%>').val();
+                    GetColors();
+                    FillColors(Index, -1);
                     GetProductSizes(ProductId, Index, SelectedValue);
                 }
             });
@@ -525,10 +529,7 @@
                 var SizesDropDown = "#ddlSizes" + Index;
                 $(SizesDropDown).empty();
                 $(SizesDropDown).append($("<option></option>").val("-1").html("Select Size"));
-                if (ProductId > 0) {
                     $(SizesDropDown).append($("<option></option>").val("-2").html("Add New Size"));
-                }
-
                 var FilteredSizes = Sizes.filter(function (e) {
                     return e.ProductID == ProductId;
                 });
