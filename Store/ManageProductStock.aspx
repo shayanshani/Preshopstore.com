@@ -265,7 +265,7 @@
                 if (barcode == "True")
                     saleDataHtml += "<td align='center'><input type='text' disabled='disabled' class='form-control subtotalInputBarCode' id='txtBarCode" + RowId + "'  /></td>";
                 saleDataHtml += "<td align='center'><select id='ddlCompany" + RowId + "' class='form-control Searchable' onchange='FillProducts(this.value," + RowId + ",-1)'></select></td>";
-                saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='GetProductSizes(this.value," + RowId + ",-1);'></select></td>";
+                saleDataHtml += "<td align='center'><select id='ddlProducts" + RowId + "' class='form-control Searchable' onchange='AssignValue(this.value," + RowId + ");GetProductSizes(this.value," + RowId + ",-1);'></select></td>";
                 if (HaveSizes == "True")
                     saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='CheckNewEntry(" + RowId + ");'></select></td>";
                 if (IsColor == "2")
@@ -378,7 +378,6 @@
                 url: "ManageProductStock.aspx/FillBrands",
                 dataType: "json",
                 success: function (res) {
-                    console.log("Filling Brands");
                     Brands = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     FillBrands(Index, SelectedValue);
@@ -392,12 +391,12 @@
                 url: "ManageProductStock.aspx/GetProduct",
                 dataType: "json",
                 success: function (res) {
-                    console.log("Filling Products");
                     Products = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var CompanyId = $('#<%= hfCompanyID.ClientID%>').val();
                     var ProductId = $('#<%= hfProductID.ClientID%>').val();
-                    GetProductsConfig(SelectedValue);
+                    console.log("ProductId from Getproducts function=" + ProductId);
+                    GetProductsConfig(ProductId);
                     FillProducts(CompanyId, Index, SelectedValue);
                     GetProductSizes(ProductId, Index, -1);
                 }
@@ -482,8 +481,6 @@
         }
 
         function FillColors(Index, SelectedValue) {
-            console.log("Filling colors");
-            console.log("Total Colors "+Color.length);
             var PaletteColors = [];
             if (Color.length == 0)
                 GetColors();
@@ -519,21 +516,30 @@
             });
         }
 
+        function AssignValue(val,Index) {
+           <%-- console.log("Assigning value");
+            $("#<%= hfProductID.ClientID %>").val(val);
+            GetProductConfig($("#<%= hfProductID.ClientID %>").val(), Index);--%>
+            FillColors(Index, -1);
+        }
+
         function GetProductSizes(ProductId, Index, SelectedValue) {
             if (ProductId == -2) {
                 openModal("#AddEditProduct");
             }
-            console.log("Filling sizes")
-            GetProductsConfig(ProductId);
-            FillColors(Index, -1);
             $("#ddlProducts" + Index).removeClass("error");
-            $("#<%= hfProductID.ClientID %>").val(ProductId);
-            var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
+            var newProduct= $("#<%= hfAddingNewProduct.ClientID%>").val();
+            if (newProduct==1) {
+                ProductId = $("#<%= hfProductID.ClientID %>").val();
+                $("#<%= hfAddingNewProduct.ClientID %>").val(0);
+            }
+            console.log(ProductId + " in getproductsizes function");
+            var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
             if (HaveSizes == "True") {
                 var SizesDropDown = "#ddlSizes" + Index;
                 $(SizesDropDown).empty();
                 $(SizesDropDown).append($("<option></option>").val("-1").html("Select Size"));
-                    $(SizesDropDown).append($("<option></option>").val("-2").html("Add New Size"));
+                $(SizesDropDown).append($("<option></option>").val("-2").html("Add New Size"));
                 var FilteredSizes = Sizes.filter(function (e) {
                     return e.ProductID == ProductId;
                 });
@@ -552,9 +558,9 @@
                 var Config = ProductsConfig.filter(function (e) {
                     return e.ProductID == ProductId;
                 });
-                console.log(Config);
+                console.log("Color config "+Config);
                 if (Config.length > 0) {
-                    console.log(Config[0].IsColor);
+                    console.log("Color config "+Config[0].IsColor);
                     if (Config[0].IsColor == 1) {
                         $("#<%= thColor.ClientID%>").show();
                         $("#tdColor" + Index).show();
@@ -562,7 +568,7 @@
                     else {
                         $("#<%= thColor.ClientID%>").hide();
                         $("#tdColor" + Index).hide();
-                        $("#tdColor" + Index).html(null);
+                        //$("#tdColor" + Index).html(null);
                     }
                 }
                 else {
@@ -632,6 +638,7 @@
         }
 
         function SaveProduct() {
+            $("#<%= hfAddingNewProduct.ClientID%>").val(0);
             var Category = $('#<%= ddlCateogory.ClientID%>').val();
             var Product = $('#<%= txtProductName.ClientID%>').val();
             var Condition = $('#<%= ddlProductCondition.ClientID%>').val();
@@ -666,13 +673,14 @@
                     $find("<%= RadAjaxManager1.ClientID %>").ajaxRequest();
                     var r = data.d;
                     $("#<%= hfProductID.ClientID%>").val(r);
-                    GetProducts(r == -3 ? -1 : r);
+                    $("#<%= hfAddingNewProduct.ClientID%>").val(1);
+                    console.log("ProductId from save function" + r);
+                    GetProducts(r);
                     hideModal('#AddEditProduct');
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: Product + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
                     else {
-                        ClearProductItems();
                         $.notify({ title: 'Success Status: ', message: 'Product has been added!', icon: 'fa fa-check' }, { type: 'success' });
                     }
                 },
@@ -706,17 +714,17 @@
                 success: function (data) {
                     var r = data.d;
                     $('#<%= hfSize.ClientID%>').val(r);
-                     GetSizes(r == -3 ? -1 : r);
-                     hideModal('#AddEditSize');
-                     if (r == -3) {
-                         $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
-                     }
-                     else {
-                         $.notify({ title: 'Success Status: ', message: 'Size has been added!', icon: 'fa fa-check' }, { type: 'success' });
-                     }
+                    GetSizes(r == -3 ? -1 : r);
+                    hideModal('#AddEditSize');
+                    if (r == -3) {
+                        $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
+                    }
+                    else {
+                        $.notify({ title: 'Success Status: ', message: 'Size has been added!', icon: 'fa fa-check' }, { type: 'success' });
+                    }
 
-                 },
-             });
+                },
+            });
         }
 
         function ClearSizeItems() {
@@ -863,6 +871,7 @@
     <asp:HiddenField ID="hfColorOrId" runat="server" />
     <asp:HiddenField ID="hfImagePath" runat="server" />
     <asp:HiddenField ID="hfProductID" runat="server" />
+    <asp:HiddenField ID="hfAddingNewProduct" runat="server" />
     <asp:HiddenField ID="hfCompanyID" runat="server" />
     <asp:HiddenField ID="hfDescription" runat="server" />
     <asp:HiddenField ID="hfCurrentIndex" runat="server" />
