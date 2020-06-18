@@ -398,6 +398,7 @@
                     var CompanyId = $('#<%= hfCompanyID.ClientID%>').val();
                     GetProductsConfig(SelectedValue);
                     FillProducts(CompanyId, Index, SelectedValue);
+                    GetProductSizes(ProductId, Index, -1);
                 }
             });
         }
@@ -440,7 +441,6 @@
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var ProductId = $('#<%= hfProductID.ClientID%>').val();
                     FillColors(Index, -1);
-                    GetProductsConfig(ProductId, Index);
                     GetProductSizes(ProductId, Index, SelectedValue);
                 }
             });
@@ -481,7 +481,6 @@
         }
 
         function FillColors(Index, SelectedValue) {
-            console.clear();
             console.log("Filling colors");
             console.log("Total Colors "+Color.length);
             var PaletteColors = [];
@@ -523,6 +522,9 @@
             if (ProductId == -2) {
                 openModal("#AddEditProduct");
             }
+            console.log("Filling sizes")
+            GetProductsConfig(ProductId);
+            FillColors(Index, -1);
             $("#ddlProducts" + Index).removeClass("error");
             $("#<%= hfProductID.ClientID %>").val(ProductId);
             var HaveSizes ="<%= Convert.ToBoolean(config.HaveSizes) %>";
