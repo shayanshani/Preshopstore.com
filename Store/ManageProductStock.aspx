@@ -269,7 +269,7 @@
                 if (HaveSizes == "True")
                     saleDataHtml += "<td align='center'><select id='ddlSizes" + RowId + "' class='form-control Searchable' onchange='CheckNewEntry(" + RowId + ");'></select></td>";
                 if (IsColor == "2")
-                    saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control' onchange='RemoveError(" + RowId + ");'></select></td>";
+                    saleDataHtml += "<td align='center' style='display:none' id='tdColor" + RowId + "'><div class='newcolorpicker' id='picker" + RowId + "'></div><select id='ddlColors" + RowId + "' class='form-control hidden' onchange='RemoveError(" + RowId + ");'></select></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtQty" + RowId + "' autocomplete='off' class='form-control' style='width:50px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtPrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' onkeydown='CalculateItemTotal(" + RowId + ");' onkeyup='CalculateItemTotal(" + RowId + ");' /></td>";
                 saleDataHtml += "<td align='center'><input type='text' id='txtSalePrice" + RowId + "' autocomplete='off' class='form-control' style='width:100px' /></td>";
@@ -439,8 +439,8 @@
                     Sizes = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var ProductId = $('#<%= hfProductID.ClientID%>').val();
-                    GetColors();
                     FillColors(Index, -1);
+                    GetProductsConfig(ProductId, Index);
                     GetProductSizes(ProductId, Index, SelectedValue);
                 }
             });
