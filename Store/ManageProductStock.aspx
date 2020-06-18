@@ -396,6 +396,7 @@
                     Products = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
                     var CompanyId = $('#<%= hfCompanyID.ClientID%>').val();
+                    var ProductId = $('#<%= hfProductID.ClientID%>').val();
                     GetProductsConfig(SelectedValue);
                     FillProducts(CompanyId, Index, SelectedValue);
                     GetProductSizes(ProductId, Index, -1);
