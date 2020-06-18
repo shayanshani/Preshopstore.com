@@ -483,6 +483,7 @@
         function FillColors(Index, SelectedValue) {
             console.clear();
             console.log("Filling colors");
+            console.log("Total Colors "+Color.length);
             var PaletteColors = [];
             if (Color.length == 0)
                 GetColors();
@@ -556,8 +557,8 @@
                         $("#tdColor" + Index).show();
                     }
                     else {
-                        $("#<%= thColor.ClientID%>").show();
-                        $("#tdColor" + Index).show();
+                        $("#<%= thColor.ClientID%>").hide();
+                        $("#tdColor" + Index).hide();
                         $("#tdColor" + Index).html(null);
                     }
                 }
@@ -646,7 +647,7 @@
                 chkColor: chkColor,
                 chkFlavour: chkFlavour,
                 chkFlavourOnly: chkFlavourOnly,
-                chkColorOnly: chkColor,
+                chkColorOnly: chkColorOnly,
                 Description: Description,
                 Unit: Unit
             };
