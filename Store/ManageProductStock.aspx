@@ -498,7 +498,7 @@
         function initColorPicker(Index, PaletteColors) {
             var ColorDropdownId = "#ddlColors" + Index;
             $("#picker" + Index).colorPick({
-                'initialColor': '#3498db',
+                'initialColor': '#73879C',
                 'allowRecent': false,
                 'allowCustomColor': false,
                 'paletteLabel': 'Choose color',
