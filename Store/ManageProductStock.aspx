@@ -333,6 +333,7 @@
                 success: function (data) {
                     if (data.d == true) {
                         Clear();
+                        $("#btnSubmit").attr('disabled', false);
                         $.notify({ title: 'Stock Status: ', message: 'Stock has been saved', icon: 'fa fa-check' }, { type: 'success' });
                     }
                     else {
@@ -638,6 +639,7 @@
                     GetBrands(r == -3 ? -1 : r);
                     hideModal('#AddEditBrand');
                     $("#btnSaveBrand").html('Save');
+                    $("#btnSaveBrand").attr('disabled', false);
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: brandname + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
@@ -700,6 +702,7 @@
                     GetProducts(r);
                     hideModal('#AddEditProduct');
                     $("#btnSaveProduct").html('Save');
+                    $("#btnSaveProduct").attr('disabled', false);
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: Product + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
@@ -751,6 +754,7 @@
                     GetSizes(r == -3 ? -1 : r);
                     hideModal('#AddEditSize');
                     $("#btnSaveSize").html('Save');
+                    $("#btnSaveSize").attr('disabled', false);
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
