@@ -344,11 +344,13 @@
 
         function Clear() {
             $("#tblStockItems > tbody").empty();
-            $("#<%= txtBillNo.ClientID%>").val(parseInt($("#<%= txtBillNo.ClientID%>").val()) + 1);
             $("#<%= txtTotalBill.ClientID%>").val(null);
             $("#<%= txtPaidAmount.ClientID%>").val(null);
             $("#<%= txtRemainingAmount.ClientID%>").val(null);
             $("#<%= ddlSupplier.ClientID%>").val("-1").trigger('change');
+            var txtBillNo = $("#<%= txtBillNo.ClientID%>");
+            $("#<%= lblPreviousInvoiceNo.ClientID%>").html(txtBillNo.val());
+            txtBillNo.val(parseInt(txtBillNo.val()) + 1);
            // $("#<%= txtPurchaseDate.ClientID%>").val(null);
         }
 
