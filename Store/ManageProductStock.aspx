@@ -439,7 +439,14 @@
                 success: function (res) {
                     Sizes = res.d;
                     var Index = $('#<%= hfCurrentIndex.ClientID%>').val();
-                    var ProductId = $('#<%= hfProductID.ClientID%>').val();
+                    var ProductId = "";
+                    var newProduct = $("#<%= hfAddingNewProduct.ClientID%>").val();
+                    if (newProduct == 1) {
+                        ProductId = $("#<%= hfProductID.ClientID%>").val();
+                    }
+                    else {
+                        ProductId = $("#<%= hfProductIDExisting.ClientID%>").val();
+                    }
                     FillColors(Index, -1);
                     GetProductSizes(ProductId, Index, SelectedValue);
                 }
@@ -516,7 +523,7 @@
             });
         }
 
-        function AssignValue(val,Index) {
+        function AssignValue(val, Index) {
            <%-- console.log("Assigning value");
             $("#<%= hfProductID.ClientID %>").val(val);
             GetProductConfig($("#<%= hfProductID.ClientID %>").val(), Index);--%>
@@ -528,10 +535,14 @@
                 openModal("#AddEditProduct");
             }
             $("#ddlProducts" + Index).removeClass("error");
-            var newProduct= $("#<%= hfAddingNewProduct.ClientID%>").val();
-            if (newProduct==1) {
+            var newProduct = $("#<%= hfAddingNewProduct.ClientID%>").val();
+            if (newProduct == 1) {
                 ProductId = $("#<%= hfProductID.ClientID %>").val();
                 $("#<%= hfAddingNewProduct.ClientID %>").val(0);
+                $("#<%= hfProductIDExisting.ClientID %>").val(0);
+            }
+            else {
+                $("#<%= hfProductIDExisting.ClientID %>").val(ProductId);
             }
             console.log(ProductId + " in getproductsizes function");
             var HaveSizes = "<%= Convert.ToBoolean(config.HaveSizes) %>";
@@ -558,9 +569,9 @@
                 var Config = ProductsConfig.filter(function (e) {
                     return e.ProductID == ProductId;
                 });
-                console.log("Color config "+Config);
+                console.log("Color config " + Config);
                 if (Config.length > 0) {
-                    console.log("Color config "+Config[0].IsColor);
+                    console.log("Color config " + Config[0].IsColor);
                     if (Config[0].IsColor == 1) {
                         $("#<%= thColor.ClientID%>").show();
                         $("#tdColor" + Index).show();
@@ -704,7 +715,14 @@
         }
         function SaveSize() {
             var SizeName = $("#<%= txtSizeName.ClientID%>").val();
-            var ProductId = $("#<%= hfProductID.ClientID%>").val();
+            var ProductId = "";
+            var newProduct = $("#<%= hfAddingNewProduct.ClientID%>").val();
+            if (newProduct == 1) {
+                ProductId = $("#<%= hfProductID.ClientID%>").val();
+            }
+            else {
+                ProductId = $("#<%= hfProductIDExisting.ClientID%>").val();
+            }
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -871,6 +889,7 @@
     <asp:HiddenField ID="hfColorOrId" runat="server" />
     <asp:HiddenField ID="hfImagePath" runat="server" />
     <asp:HiddenField ID="hfProductID" runat="server" />
+    <asp:HiddenField ID="hfProductIDExisting" runat="server" />
     <asp:HiddenField ID="hfAddingNewProduct" runat="server" />
     <asp:HiddenField ID="hfCompanyID" runat="server" />
     <asp:HiddenField ID="hfDescription" runat="server" />
