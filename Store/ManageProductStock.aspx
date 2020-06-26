@@ -628,11 +628,16 @@
                 url: "ManageProductStock.aspx/SaveBrand",
                 data: "{'BrandName':'" + brandname + "'}",
                 dataType: "json",
+                beforeSend: function () {
+                    $("#btnSaveBrand").attr('disabled', true);
+                    $("#btnSaveBrand").html('Saving...');
+                },
                 success: function (data) {
                     var r = data.d;
                     $('#<%= hfCompanyID.ClientID%>').val(r);
                     GetBrands(r == -3 ? -1 : r);
                     hideModal('#AddEditBrand');
+                    $("#btnSaveBrand").html('Save');
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: brandname + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
@@ -682,6 +687,10 @@
                 url: "ManageProductStock.aspx/SaveProduct",
                 data: ProductDetail,
                 dataType: "json",
+                beforeSend: function () {
+                    $("#btnSaveProduct").attr('disabled', true);
+                    $("#btnSaveProduct").html('Saving...');
+                },
                 success: function (data) {
                     $find("<%= RadAjaxManager1.ClientID %>").ajaxRequest();
                     var r = data.d;
@@ -690,6 +699,7 @@
                     console.log("ProductId from save function" + r);
                     GetProducts(r);
                     hideModal('#AddEditProduct');
+                    $("#btnSaveProduct").html('Save');
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: Product + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
@@ -731,11 +741,16 @@
                 url: "ManageProductStock.aspx/SaveSize",
                 data: "{'Size':'" + SizeName + "','ProductID':'" + ProductId + "'}",
                 dataType: "json",
+                beforeSend: function () {
+                    $("#btnSaveSize").attr('disabled', true);
+                    $("#btnSaveSize").html('Saving...');
+                },
                 success: function (data) {
                     var r = data.d;
                     $('#<%= hfSize.ClientID%>').val(r);
                     GetSizes(r == -3 ? -1 : r);
                     hideModal('#AddEditSize');
+                    $("#btnSaveSize").html('Save');
                     if (r == -3) {
                         $.notify({ title: 'Duplication: ', message: SizeName + ' already exist!', icon: 'fa fa-check' }, { type: 'danger' });
                     }
@@ -926,7 +941,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="SaveBrand();">Save</button>
+                    <button type="button" class="btn btn-success" id="btnSaveBrand" onclick="SaveBrand();">Save</button>
                 </div>
             </div>
         </div>
@@ -1139,7 +1154,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" onclick="ClearProductItems();" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="SaveProduct()">Save</button>
+                    <button type="button" class="btn btn-success" id="btnSaveProduct" onclick="SaveProduct()">Save</button>
                 </div>
             </div>
         </div>
@@ -1174,7 +1189,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="SaveSize();">Save</button>
+                    <button type="button" class="btn btn-success" id="btnSaveSize" onclick="SaveSize();">Save</button>
                 </div>
             </div>
         </div>
