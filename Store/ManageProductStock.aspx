@@ -344,12 +344,12 @@
 
         function Clear() {
             $("#tblStockItems > tbody").empty();
-            $("#<%= txtBillNo.ClientID%>").val(null);
+            $("#<%= txtBillNo.ClientID%>").val(parseInt($("#<%= txtBillNo.ClientID%>").val()) + 1);
             $("#<%= txtTotalBill.ClientID%>").val(null);
             $("#<%= txtPaidAmount.ClientID%>").val(null);
             $("#<%= txtRemainingAmount.ClientID%>").val(null);
             $("#<%= ddlSupplier.ClientID%>").val("-1").trigger('change');
-            $("#<%= txtPurchaseDate.ClientID%>").val(null);
+           // $("#<%= txtPurchaseDate.ClientID%>").val(null);
         }
 
         function Remove(RowId) {
